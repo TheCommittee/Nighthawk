@@ -1,0 +1,58 @@
+:root {
+  font-size: 62.5%;
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 1.6rem;
+  min-height: 100%;
+  width: 100%;
+  background: url('https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  font-family: 'Varela Round', sans-serif;
+}
+
+#logo-pic-venue {
+  height: 6rem;
+  width: auto;
+  position: fixed;
+  top: .1rem;
+  left: 1rem;
+}
+
+#venue-page {
+  padding-top: 11rem;
+  display: flex;
+  justify-content: center;
+}
+
+#venue-details-column {
+  margin-right: 1rem;
+}
+
+h2 {
+  font-size: 6rem;
+}
+
+.specific-venue-image {
+  height: 20rem;
+  width: auto;
+}
+
+#map {
+  margin-left: 1rem;
+}
+
+#specific-venue-details {
+  font-size: 2rem;
+}

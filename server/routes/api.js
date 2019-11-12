@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const apiController = require('../controllers/apiController');
 
-router.post('/', apiController.yelp, (req, res, next) => {
-  console.log('in the router')
-  res.sendStatus(200);
+router.post('/', apiController.geolocation, apiController.yelp, (req, res) => {
+  res.status(200).json(res.locals.businesses);
 });
 
 module.exports = router;

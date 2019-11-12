@@ -3,7 +3,7 @@ import React from 'react';
 const SearchDisplay = (props) => {
   return (
     <div>
-      SearchDisplay
+      {props.searchDisplayResults}
     </div>
   )
 }

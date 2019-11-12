@@ -5,17 +5,22 @@
   "dependencies": {
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
+    "cross-env": "^6.0.3",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "lodash.debounce": "^4.0.8",
+    "node-fetch": "^2.6.0",
     "pg": "^7.12.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
+    "url-loader": "^2.2.0",
     "yelp-api": "^1.0.3"
   },
   "scripts": {
     "start": "nodemon server/server.js",
-    "build": "webpack",
-    "dev": "nodemon server/server.js & webpack-dev-server --open"
+    "build": "cross-env NODE_ENV=production webpack",
+    "dev": "concurrently \"cross-env webpack-dev-server --open\" \"cross-env nodemon server/server.js || true\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,6 +42,8 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-react": "^7.7.0",
     "babel-loader": "^8.0.6",
+    "concurrently": "^5.0.0",
+    "css-loader": "^3.2.0",
     "nodemon": "^1.19.4",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",

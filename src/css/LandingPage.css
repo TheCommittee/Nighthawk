@@ -1,0 +1,92 @@
+:root {
+  /* font-size 62.5% makes 1rem = 10px, rem used for dyanmic sizing */
+  font-size: 62.5%;
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 1.6rem;
+  text-align: center;
+  min-height: 100%;
+  width: 100%;
+  background: url('https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#home-content {
+  margin-top: 5%;
+}
+
+#logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#logo-pic {
+  height: 15rem;
+  width: auto;
+  filter: invert(100%);
+}
+
+h1 {
+  font-family: 'Varela Round', sans-serif;
+  font-size: 20rem;
+  color: white;
+  text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
+  display: inline-block;
+  margin-left: -2rem;
+}
+/* 
+#Q {
+  color: white;
+  padding: .3rem 3.5rem;
+  text-shadow: -4px 0 black, 0 4px black, 4px 0 black, 0 -4px black;
+  /* background: linear-gradient(to right, #20f5e3 0%, #000 180%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+/* } */ 
+
+#home-page-search-bar {
+  display: flex;
+  justify-content: center;
+}
+
+
+input {
+  padding: 2rem;
+  outline: none;
+  border: 1px solid gray;
+  border-radius: 40px;
+  margin: 1rem;
+  height: 5rem;
+  font-size: 2.2rem;
+}
+
+#searchInput {
+  width: 50rem;
+}
+
+#location {
+  width: 30rem;
+}
+
+#searchButton {
+  font-family: 'Varela Round', sans-serif;
+  border-radius: 30px;
+  width: 5rem;
+  background-image: url('https://static.thenounproject.com/png/102634-200.png');
+  background-size: 2.5rem 2.5rem;
+  background-repeat: no-repeat;
+  background-position: center;
+}
