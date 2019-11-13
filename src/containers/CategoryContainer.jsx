@@ -10,8 +10,8 @@ class CategoryContainer extends Component {
 
     if (this.props.categoryPage && this.props.current < 50) {
       window.onscroll = debounce(() => {
-        console.log("scrolling");
-
+        this.props.moveMap();
+        // console.log("scrolling");
         if (this.props.current >= 50) return;
 
         if (
@@ -68,10 +68,6 @@ class CategoryContainer extends Component {
                 ? null
                 : "background-red"
             }
-            // id={
-            //   this.props.favoriteColoring ? "background-red" : "background-blue"
-            // }
-            // onClick={() => this.props.addToFavorites(element.id)}
             onClick={() => {
               this.props.addToFavorites(element);
             }}
@@ -82,16 +78,19 @@ class CategoryContainer extends Component {
       );
     });
 
-  if (this.props.categoryPage) {
-    search =
-    <div id="category-body">
-      <SearchDisplay
-        searchDisplayResults={searchDisplayResults}
-      />
-      <Map name={this.props.mapName} venueLocation={this.props.venueLocation} latitude={this.props.latitude} longitude={this.props.longitude} />
-    </div>
-  }
-
+    if (this.props.categoryPage) {
+      search = (
+        <div id="category-body">
+          <SearchDisplay searchDisplayResults={searchDisplayResults} />
+          <Map
+            name={this.props.mapName}
+            venueLocation={this.props.venueLocation}
+            latitude={this.props.latitude}
+            longitude={this.props.longitude}
+          />
+        </div>
+      );
+    }
 
     return (
       <div>
@@ -116,8 +115,7 @@ class CategoryContainer extends Component {
         </section>
         {search}
       </div>
-     );
-
+    );
   }
 }
 

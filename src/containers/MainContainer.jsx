@@ -31,7 +31,7 @@ class MainContainer extends Component {
       venueLongitude: "",
       waitTime: 0,
       venueWaitTimeList: [],
-      mapName: '',
+      mapName: "",
 
       // components for infinite scrolling functionality
       current: 25,
@@ -60,6 +60,7 @@ class MainContainer extends Component {
     this.selectVenue = this.selectVenue.bind(this);
     this.setWaitTime = this.setWaitTime.bind(this);
     this.addWaitTime = this.addWaitTime.bind(this);
+    this.moveMap = this.moveMap.bind(this);
   }
 
   // functions used for login and signup
@@ -83,8 +84,8 @@ class MainContainer extends Component {
   }
 
   componentDidMount() {
-    const script = '//www.opentable.com/widget/reservation/loader?rid=109594&rid=4524&type=multi&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false';
-
+    const script =
+      "//www.opentable.com/widget/reservation/loader?rid=109594&rid=4524&type=multi&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false";
   }
 
   // functions used for search bar
@@ -114,10 +115,11 @@ class MainContainer extends Component {
         // console.log('introspecting the data: ', parsedData.businesses[0])
 
         // Coordinates used for map rendered in Category Container (List Page)
-        const firstBusinessLatitude = parsedData.businesses[0].coordinates.latitude;
-        const firstBusinessLongitude = parsedData.businesses[0].coordinates.longitude;
+        const firstBusinessLatitude =
+          parsedData.businesses[0].coordinates.latitude;
+        const firstBusinessLongitude =
+          parsedData.businesses[0].coordinates.longitude;
         const firstBusinessName = parsedData.businesses[0].name;
-
 
         const listOfBusinesses = [];
         // console.log(parsedData.businesses.length)
@@ -143,7 +145,7 @@ class MainContainer extends Component {
               longitude: firstBusinessLongitude.toString(),
               searchResults: listOfBusinesses,
               current: state.current + 5,
-              mapName: firstBusinessName,
+              mapName: firstBusinessName
             };
           });
           // console.log(this.state.searchResults);
@@ -158,8 +160,39 @@ class MainContainer extends Component {
     });
   }
 
+  moveMap() {
+    let isScrolling;
+    window.addEventListener(
+      "scroll",
+      function(event) {
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(function() {
+          console.log("Scrolling has stopped.");
+        }, 66);
+      },
+      false
+    );
+    let target = document.querySelectorAll(".list-item");
+    let myItem = target[0];
+    for (let i = 0; i < target.length; i++) {
+      if (
+        target[i].getBoundingClientRect().top < 300
+        // &&
+        // target[i].getBoundingClientRect().top > 120
+      ) {
+        myItem = target[i].childNodes[1].data;
+      }
+      this.setState({ mapName: myItem });
+      // console.log("this.state.mapName -----> ", this.state.mapName);
+      // if (!isScrolling) {
+      //   this.setState({ mapName: myItem });
+      // }
+    }
+    console.log(isScrolling);
+  }
+
   addToFavorites(venue) {
-    console.log('this is searchResults', this.state.searchResults);
+    console.log("this is searchResults", this.state.searchResults);
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
     // console.log(“VENUE ---> “, venue);
@@ -168,34 +201,31 @@ class MainContainer extends Component {
         if (tempFavIds.indexOf(venue.id) === -1) {
           // console.log(this.state.searchResults[i].id);
           // console.log(venue.id);
-          console.log('IN IF STATEMENT');
+          console.log("IN IF STATEMENT");
           tempFav.push(venue);
           tempFavIds.push(venue.id);
-          console.log('TEMPFAV ---> ', tempFav);
+          console.log("TEMPFAV ---> ", tempFav);
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
-          console.log('this.state.favorites -->', this.state.favorites);
-          axios.post('/addfavorite', {
-          restaurant_id: venue
-        });
-  break;
-} else {
-  console.log('IN ELSE STATEMENT');
-  let index = tempFavIds.indexOf(venue.id);
-  tempFav.splice(index, 1);
-  tempFavIds.splice(index, 1);
-  this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
-  console.log('this.state.favorites -->', this.state.favorites);
-  axios.delete('/removefavorite', {
-  restaurant_id: venue
-});
-// .then(this.setState({ favorites: tempFav }));
-}
-}
-}
-}
-
-
-
+          console.log("this.state.favorites -->", this.state.favorites);
+          axios.post("/addfavorite", {
+            restaurant_id: venue
+          });
+          break;
+        } else {
+          console.log("IN ELSE STATEMENT");
+          let index = tempFavIds.indexOf(venue.id);
+          tempFav.splice(index, 1);
+          tempFavIds.splice(index, 1);
+          this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+          console.log("this.state.favorites -->", this.state.favorites);
+          axios.delete("/removefavorite", {
+            restaurant_id: venue
+          });
+          // .then(this.setState({ favorites: tempFav }));
+        }
+      }
+    }
+  }
 
   // functions used for to select a specific venue on the category page to display on the venue page
   selectVenue(id, name, url, image, location, phone, latitude, longitude) {
@@ -251,21 +281,18 @@ class MainContainer extends Component {
     // conditional rendering for the login page
     let login = null;
     if (this.state.loginPage) {
-
       login = <LoginPage signupButton={this.signupButton} />;
     }
 
     // conditional rendering for the signup page
     let signup = null;
     if (this.state.signupPage) {
-
       signup = <SignUpPage loginButton={this.loginButton} />;
     }
 
     // conditional rendering for the homepage; default true (shows first)
     let home = null;
     if (this.state.homePage) {
-
       document.body.style.background =
         "url('https://images.pexels.com/photos/1604200/pexels-photo-1604200.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')";
       home = (
@@ -302,61 +329,61 @@ class MainContainer extends Component {
     let category = null;
     if (this.state.categoryPage) {
       document.body.style.background = "url('')";
-      category =
-      <CategoryContainer
-        // props for search bar
-        setSearchInput = {this.setSearchInput}
-        setLocation = {this.setLocation}
-        search = {this.search}
-        favorites={this.state.favorites}
-        addToFavorites={this.addToFavorites}
-        searchInput={this.state.searchInput}
-        location={this.state.location}
-        searchResults={this.state.searchResults}
-        mapName={this.state.mapName}
-        selectVenue={this.selectVenue}
-        waitTimes={this.state.waitTimes}
-        venueName={this.state.venueName}
-        latitude={this.state.latitude}
-        longitude={this.state.longitude}
-        venueLocation={this.state.venueLocation}
-        homePage={this.state.homePage}
-        categoryPage={this.state.categoryPage}
-        venuePage={this.state.venuePage}
-        current={this.state.current}
-      />
+      category = (
+        <CategoryContainer
+          // props for search bar
+          setSearchInput={this.setSearchInput}
+          setLocation={this.setLocation}
+          search={this.search}
+          favorites={this.state.favorites}
+          addToFavorites={this.addToFavorites}
+          moveMap={this.moveMap}
+          searchInput={this.state.searchInput}
+          location={this.state.location}
+          searchResults={this.state.searchResults}
+          mapName={this.state.mapName}
+          selectVenue={this.selectVenue}
+          waitTimes={this.state.waitTimes}
+          venueName={this.state.venueName}
+          latitude={this.state.latitude}
+          longitude={this.state.longitude}
+          venueLocation={this.state.venueLocation}
+          homePage={this.state.homePage}
+          categoryPage={this.state.categoryPage}
+          venuePage={this.state.venuePage}
+          current={this.state.current}
+        />
+      );
     }
 
     // conditional rendering for the venue page
-  let venue = null;
-  if (this.state.venuePage) {
-    venue =
-    <VenueContainer
-      // props for search bar
-      setSearchInput = {this.setSearchInput}
-      setLocation = {this.setLocation}
-      search = {this.search}
-
-      searchInput={this.state.searchInput}
-      location={this.state.location}
-      searchResults={this.state.searchResults}
-
-      // props for venue selection
-      venueId={this.state.venueId}
-      venueName={this.state.venueName}
-      venueUrl={this.state.venueUrl}
-      venueImage={this.state.venueImage}
-      venueLocation={this.state.venueLocation}
-      venuePhone={this.state.venuePhone}
-      venueWaitTimeList={this.state.venueWaitTimeList}
-      venueLatitude={this.state.venueLatitude}
-      venueLongitude={this.state.venueLongitude}
-      setWaitTime={this.setWaitTime}
-      addWaitTime={this.addWaitTime}
-      mapName={this.state.mapName}
-    />
-  }
-
+    let venue = null;
+    if (this.state.venuePage) {
+      venue = (
+        <VenueContainer
+          // props for search bar
+          setSearchInput={this.setSearchInput}
+          setLocation={this.setLocation}
+          search={this.search}
+          searchInput={this.state.searchInput}
+          location={this.state.location}
+          searchResults={this.state.searchResults}
+          // props for venue selection
+          venueId={this.state.venueId}
+          venueName={this.state.venueName}
+          venueUrl={this.state.venueUrl}
+          venueImage={this.state.venueImage}
+          venueLocation={this.state.venueLocation}
+          venuePhone={this.state.venuePhone}
+          venueWaitTimeList={this.state.venueWaitTimeList}
+          venueLatitude={this.state.venueLatitude}
+          venueLongitude={this.state.venueLongitude}
+          setWaitTime={this.setWaitTime}
+          addWaitTime={this.addWaitTime}
+          mapName={this.state.mapName}
+        />
+      );
+    }
 
     return (
       <div>
