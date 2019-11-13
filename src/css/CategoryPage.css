@@ -14,7 +14,8 @@ body {
   font-size: 1.6rem;
   min-height: 100%;
   width: 100%;
-  background: url('https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260') no-repeat center center fixed; 
+  background: url("https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+    no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -28,15 +29,16 @@ body {
   justify-content: center;
   background-color: lightgray;
   margin-bottom: 2rem;
-  padding: .6rem;
+  padding: 0.6rem;
   align-items: center;
+  z-index: 1;
 }
 
 #logo-pic-category {
   height: 6rem;
   width: auto;
   position: fixed;
-  top: .1rem;
+  top: 0.1rem;
   left: 1rem;
 }
 
@@ -53,12 +55,12 @@ button {
   padding: 1rem;
   list-style-type: none;
   font-size: 2rem;
-  font-family: 'Varela Round', sans-serif;
+  font-family: "Varela Round", sans-serif;
   display: flex;
   align-items: center;
   height: 25rem;
   width: 45rem;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 img {
@@ -71,4 +73,21 @@ button:hover {
   transform: scale(1.06);
 }
 
+#background-red {
+  background-color: red;
+}
 
+#map {
+  position: fixed;
+  left: 850px;
+}
+
+#displayColumn {
+  position: relative;
+  left: -20%;
+}
+
+#venue-details-column {
+  position: relative;
+  left: -20%;
+}
