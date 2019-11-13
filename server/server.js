@@ -29,7 +29,7 @@ app.use('/', (req, res) => res.status(200).sendFile(path.resolve(__dirname, '../
 
 
 // 404 handler
-app.use('*', (req,res) => {
+app.use('*', (req, res) => {
   res.status(404).send('Not Found');
 });
 
