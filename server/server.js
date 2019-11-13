@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const dbRouter = require('./routes/dbRouter.js');
 const apiRouter = require('./routes/api');
+const fs = require('fs');
 
 const PORT = 3000;
 
@@ -26,8 +27,9 @@ app.use('/api', apiRouter);
 app.use('/', (req, res) => res.status(200).sendFile(path.resolve(__dirname, '../src/index.html')))
 
 
+
 // 404 handler
-app.use('*', (req,res) => {
+app.use('*', (req, res) => {
   res.status(404).send('Not Found');
 });
 
