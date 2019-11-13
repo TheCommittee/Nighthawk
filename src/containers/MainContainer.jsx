@@ -5,6 +5,7 @@ import VenueContainer from "./VenueContainer.jsx";
 import LoginPage from "../components/LoginPage.jsx";
 import SignUpPage from "../components/SignUpPage.jsx";
 import axios from "axios";
+import FavoritePageContainer from './FavoritePageContainer.jsx'
 
 class MainContainer extends Component {
   constructor(props) {
@@ -70,7 +71,7 @@ class MainContainer extends Component {
     this.addWaitTime = this.addWaitTime.bind(this);
     this.moveMap = this.moveMap.bind(this);
     this.renderOpenTable = this.renderOpenTable.bind(this);
-
+    this.headerFavsBtn = this.headerFavsBtn.bind(this);
   }
 
   // functions used for login and signup
@@ -102,6 +103,18 @@ class MainContainer extends Component {
 
     document.body.appendChild(script);
   }
+  //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+  headerFavsBtn(){
+    this.setState(prevState => ({
+      toggleFavorites: !prevState.toggleFavorites,
+      loginPage: false,
+      signupPage: false,
+      categoryPage: false,
+      venuePage: false,
+    }))
+    // console.log('this is toggle',this.state.toggleFavorites)
+  }
+
 
 
   // functions used for search bar
@@ -375,6 +388,24 @@ class MainContainer extends Component {
       );
     }
 
+    //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+    let favoritePage = null;
+        if (this.state.toggleFavorites){
+          favoritePage = 
+          <FavoritePageContainer 
+          favorites={this.state.favorites}
+          // venueId={this.state.venueId}
+          // venueName={this.state.venueName}
+          // venueUrl={this.state.venueUrl}
+          // venueImage={this.state.venueImage}
+          // venueLocation={this.state.venueLocation}
+          // venuePhone={this.state.venuePhone}
+          // venueLatitude={this.state.venueLatitude}
+          // venueLongitude={this.state.venueLongitude}
+          // mapName={this.state.mapName}
+          />
+        }
+
     // conditional rendering for the category page
     let category = null;
     if (this.state.categoryPage) {
@@ -403,9 +434,11 @@ class MainContainer extends Component {
           categoryPage={this.state.categoryPage}
           venuePage={this.state.venuePage}
           current={this.state.current}
+          headerFavsBtn={this.headerFavsBtn}
         />
 
     }
+
 
     // conditional rendering for the venue page
   let venue = null;
@@ -444,6 +477,7 @@ class MainContainer extends Component {
       <div>
         {login}
         {signup}
+        {favoritePage}
         {home}
         {category}
         {venue}
