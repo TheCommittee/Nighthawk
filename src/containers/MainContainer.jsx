@@ -1,33 +1,34 @@
-import React, { Component } from 'react';
-import '../css/LandingPage.css';
-import CategoryContainer from './CategoryContainer.jsx';
-import VenueContainer from './VenueContainer.jsx';
-import LoginPage from '../components/LoginPage.jsx';
-import SignUpPage from '../components/SignUpPage.jsx';
+import React, { Component } from "react";
+import "../css/LandingPage.css";
+import CategoryContainer from "./CategoryContainer.jsx";
+import VenueContainer from "./VenueContainer.jsx";
+import LoginPage from "../components/LoginPage.jsx";
+import SignUpPage from "../components/SignUpPage.jsx";
+import axios from "axios";
 
 class MainContainer extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       // stateful components used for search bar and results
-      location: '',
-      searchInput: '',
+      location: "",
+      searchInput: "",
       searchResults: [],
 
       // components used for map display
-      latitude: '',
-      longitude: '',
+      latitude: "",
+      longitude: "",
 
       // components related to selecting specific venue
-      venueId: '',
-      venueName: '',
-      venueUrl: '',
-      venueImage: '',
-      venueLocation: '',
-      venuePhone: '',
-      venueLatitude: '',
-      venueLongitude: '',
+      venueId: "",
+      venueName: "",
+      venueUrl: "",
+      venueImage: "",
+      venueLocation: "",
+      venuePhone: "",
+      venueLatitude: "",
+      venueLongitude: "",
       waitTime: 0,
       venueWaitTimeList: [],
       mapName: '',
@@ -42,7 +43,11 @@ class MainContainer extends Component {
       homePage: true,
       categoryPage: false,
       venuePage: false,
-    }
+
+      // components for favoriting restaurants
+      favorites: [],
+      favoriteIds: []
+    };
 
     this.loginButton = this.loginButton.bind(this);
     this.signupButton = this.signupButton.bind(this);
@@ -50,6 +55,7 @@ class MainContainer extends Component {
     this.setLocation = this.setLocation.bind(this);
     this.setSearchInput = this.setSearchInput.bind(this);
     this.search = this.search.bind(this);
+    this.addToFavorites = this.addToFavorites.bind(this);
 
     this.selectVenue = this.selectVenue.bind(this);
     this.setWaitTime = this.setWaitTime.bind(this);
@@ -63,8 +69,8 @@ class MainContainer extends Component {
       signupPage: false,
       homePage: false,
       categoryPage: false,
-      venuePage: false,
-    })
+      venuePage: false
+    });
   }
   signupButton() {
     this.setState({
@@ -72,8 +78,8 @@ class MainContainer extends Component {
       signupPage: true,
       homePage: false,
       categoryPage: false,
-      venuePage: false,
-    })
+      venuePage: false
+    });
   }
 
   componentDidMount() {
@@ -93,10 +99,13 @@ class MainContainer extends Component {
 
   search() {
     // console.log('THIS STATE LOCATION : ', this.state.location);
-    fetch ('/api', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({searchInput: this.state.searchInput, location: this.state.location})
+    fetch("/api", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        searchInput: this.state.searchInput,
+        location: this.state.location
+      })
     })
       .then(response => response.json())
       .then(data => {
@@ -108,6 +117,7 @@ class MainContainer extends Component {
         const firstBusinessLatitude = parsedData.businesses[0].coordinates.latitude;
         const firstBusinessLongitude = parsedData.businesses[0].coordinates.longitude;
         const firstBusinessName = parsedData.businesses[0].name;
+
 
         const listOfBusinesses = [];
         // console.log(parsedData.businesses.length)
@@ -134,11 +144,54 @@ class MainContainer extends Component {
               searchResults: listOfBusinesses,
               current: state.current + 5,
               mapName: firstBusinessName,
-
-            }
-          })
+            };
+          });
+          // console.log(this.state.searchResults);
         }
-      })
+      });
+    this.setState({
+      loginPage: false,
+      signupPage: false,
+      homePage: false,
+      categoryPage: true,
+      venuePage: false
+    });
+  }
+
+  addToFavorites(venue) {
+    console.log("this is searchResults", this.state.searchResults);
+    let tempFav = this.state.favorites;
+    let tempFavIds = this.state.favoriteIds;
+    // console.log("VENUE ---> ", venue);
+    for (let i = 0; i < this.state.searchResults.length; i++) {
+      if (this.state.searchResults[i].id === venue.id) {
+        if (tempFavIds.indexOf(venue.id) === -1) {
+          // console.log(this.state.searchResults[i].id);
+          // console.log(venue.id);
+          console.log("IN IF STATEMENT");
+          tempFav.push(venue);
+          tempFavIds.push(venue.id);
+          console.log("TEMPFAV ---> ", tempFav);
+          this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+          console.log("this.state.favorites -->", this.state.favorites);
+          axios.post("/addfavorite", {
+            restaurant_id: venue
+          });
+          break;
+        } else {
+          console.log("IN ELSE STATEMENT");
+          let index = tempFavIds.indexOf(venue.id);
+          tempFav.splice(index, 1);
+          tempFavIds.splice(index, 1);
+          this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+          console.log("this.state.favorites -->", this.state.favorites);
+
+          axios.delete("/removefavorite", {
+            restaurant_id: venue
+          });
+          // .then(this.setState({ favorites: tempFav }));
+        }
+      }
       this.setState({
         loginPage: false,
         signupPage: false,
@@ -147,10 +200,14 @@ class MainContainer extends Component {
         venuePage: false,
       })
 
-  }
+      }
+    }
+
+
 
   // functions used for to select a specific venue on the category page to display on the venue page
   selectVenue(id, name, url, image, location, phone, latitude, longitude) {
+    // console.log(id);
     const venueId = id;
     const venueName = name;
     const venueUrl = url;
@@ -174,68 +231,79 @@ class MainContainer extends Component {
       venuePhone,
       venueLatitude,
       venueLongitude
-    })
+    });
   }
   setWaitTime(event) {
-    this.setState({ waitTime: event.target.value })
+    this.setState({ waitTime: event.target.value });
   }
   addWaitTime() {
     // create body from the things we've saved in state through the setwaittime and selectvenue func
     const body = {
       waitTime: this.state.waitTime,
       venueId: this.state.venueId,
-      venueName: this.state.venueName,
-    }
+      venueName: this.state.venueName
+    };
     // console.log(body);
-    fetch('/dbRouter/addWaitTime', {
-      method: 'POST',
+    fetch("/dbRouter/addWaitTime", {
+      method: "POST",
       body: JSON.stringify(body),
-      headers: {'Content-Type': 'application/json'}
+      headers: { "Content-Type": "application/json" }
     })
-    .then(() => console.log('addwaittime fetch request successful'))
-    .catch((err) => {
-      console.log(`${err}: addWaitTime function error when adding wait time`)
-    })
+      .then(() => console.log("addwaittime fetch request successful"))
+      .catch(err => {
+        console.log(`${err}: addWaitTime function error when adding wait time`);
+      });
   }
 
   render() {
     // conditional rendering for the login page
     let login = null;
     if (this.state.loginPage) {
-      login =
-        <LoginPage
-          signupButton = {this.signupButton}
-        />
+
+      login = <LoginPage signupButton={this.signupButton} />;
     }
 
     // conditional rendering for the signup page
     let signup = null;
     if (this.state.signupPage) {
-      signup =
-        <SignUpPage
-          loginButton={this.loginButton}
-        />
+
+      signup = <SignUpPage loginButton={this.loginButton} />;
     }
 
     // conditional rendering for the homepage; default true (shows first)
     let home = null;
     if (this.state.homePage) {
-      document.body.style.background = "url('https://images.pexels.com/photos/1604200/pexels-photo-1604200.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')";
-      home =
-      <div id="home-content">
-        {/* // uncomment to work on login and signup functionalities
-        <button onClick={this.loginButton}>Login</button> */}
-        <div id="logo">
-          <img id="logo-pic" src="https://image.flaticon.com/icons/png/512/876/876569.png"/>
-          <h1>Queue</h1>
-        </div>
-        <section id="home-page-search-bar">
-          <input type="input" id="searchInput" placeholder="Business or Category" onChange={this.setSearchInput}/>
-          <input type="input" id="location" placeholder="Location" onChange={this.setLocation}/>
-          <input type="button" id="searchButton" onClick={this.search}/>
-        </section>
-      </div>
 
+      document.body.style.background =
+        "url('https://images.pexels.com/photos/1604200/pexels-photo-1604200.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')";
+      home = (
+        <div id="home-content">
+          {/* // uncomment to work on login and signup functionalities
+        <button onClick={this.loginButton}>Login</button> */}
+          <div id="logo">
+            <img
+              id="logo-pic"
+              src="https://image.flaticon.com/icons/png/512/876/876569.png"
+            />
+            <h1>Queue</h1>
+          </div>
+          <section id="home-page-search-bar">
+            <input
+              type="input"
+              id="searchInput"
+              placeholder="Business or Category"
+              onChange={this.setSearchInput}
+            />
+            <input
+              type="input"
+              id="location"
+              placeholder="Location"
+              onChange={this.setLocation}
+            />
+            <input type="button" id="searchButton" onClick={this.search} />
+          </section>
+        </div>
+      );
     }
 
     // conditional rendering for the category page
@@ -296,6 +364,7 @@ class MainContainer extends Component {
     />
   }
 
+
     return (
       <div>
         {login}
@@ -304,7 +373,7 @@ class MainContainer extends Component {
         {category}
         {venue}
       </div>
-    )
+    );
   }
 }
 
