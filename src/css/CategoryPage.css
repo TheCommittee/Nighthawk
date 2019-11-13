@@ -31,6 +31,7 @@ body {
   margin-bottom: 2rem;
   padding: 0.6rem;
   align-items: center;
+  z-index: 1;
 }
 
 #logo-pic-category {
@@ -74,4 +75,19 @@ button:hover {
 
 #background-red {
   background-color: red;
+}
+
+#map {
+  position: fixed;
+  left: 850px;
+}
+
+#displayColumn {
+  position: relative;
+  left: -20%;
+}
+
+#venue-details-column {
+  position: relative;
+  left: -20%;
 }

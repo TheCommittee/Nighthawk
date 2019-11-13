@@ -64,14 +64,16 @@ class CategoryContainer extends Component {
           </button>
           <div
             id={
-              this.props.favorites.indexOf(element.id) ? null : "background-red"
+              this.props.favorites.indexOf(element) === -1
+                ? null
+                : "background-red"
             }
             // id={
             //   this.props.favoriteColoring ? "background-red" : "background-blue"
             // }
             // onClick={() => this.props.addToFavorites(element.id)}
             onClick={() => {
-              this.props.addToFavorites(element.id);
+              this.props.addToFavorites(element);
             }}
           >
             Add to Favorites

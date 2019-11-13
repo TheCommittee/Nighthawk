@@ -44,7 +44,8 @@ class MainContainer extends Component {
       venuePage: false,
 
       // components for favoriting restaurants
-      favorites: []
+      favorites: [],
+      favoriteIds: []
     };
 
     this.loginButton = this.loginButton.bind(this);
@@ -150,38 +151,42 @@ class MainContainer extends Component {
     });
   }
 
-  addToFavorites(venueId) {
+  addToFavorites(venue) {
     console.log("this is searchResults", this.state.searchResults);
-    // for(let i=0; i<this.state.searchResults.length; i++){
-    //   console.log('this is id', this.state.searchResults[i].id)
-    // }
-    //-----
     let tempFav = this.state.favorites;
-    // console.log('this is indexof', tempFav.indexOf(venueId))
-    if (tempFav.indexOf(venueId) === -1) {
-      tempFav.push(venueId);
-      // console.log("Item's been favorited!");
-      // console.log(venueId);
-      axios
-        .post("/addfavorite", {
-          restaurant_id: venueId
-        })
-        // .then(res => console.log("Item's been favorited!"))
-        .then(this.setState({ favorites: tempFav }));
-      //  "background-blue"
+    let tempFavIds = this.state.favoriteIds;
+    // console.log("VENUE ---> ", venue);
+    for (let i = 0; i < this.state.searchResults.length; i++) {
+      if (this.state.searchResults[i].id === venue.id) {
+        if (tempFavIds.indexOf(venue.id) === -1) {
+          // console.log(this.state.searchResults[i].id);
+          // console.log(venue.id);
+          console.log("IN IF STATEMENT");
+          tempFav.push(venue);
+          tempFavIds.push(venue.id);
+          console.log("TEMPFAV ---> ", tempFav);
+          this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+          console.log("this.state.favorites -->", this.state.favorites);
+          axios.post("/addfavorite", {
+            restaurant_id: venue
+          });
+          break;
+        } else {
+          console.log("IN ELSE STATEMENT");
+          let index = tempFavIds.indexOf(venue.id);
+          tempFav.splice(index, 1);
+          tempFavIds.splice(index, 1);
+          this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+          console.log("this.state.favorites -->", this.state.favorites);
 
-      // console.log("venueId ---->", venueId[0]);
-      console.log("this.state.favorites ---->", this.state.favorites);
-    } else {
-      let index = tempFav.indexOf(venueId);
-      tempFav.splice(index, 1);
-      axios
-        .delete("/removefavorite", {
-          restaurant_id: venueId
-        })
-        .then(this.setState({ favorites: tempFav }));
+          axios.delete("/removefavorite", {
+            restaurant_id: venue
+          });
+          // .then(this.setState({ favorites: tempFav }));
+        }
+      }
     }
-    // console.log('this is tempFave length', tempFav.length)
+    
   }
 
   // functions used for to select a specific venue on the category page to display on the venue page
