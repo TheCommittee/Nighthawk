@@ -55,8 +55,8 @@ class CategoryContainer extends Component {
       <div>
         <section className="search-bar">
           <img id="logo-pic-category" src="https://image.flaticon.com/icons/png/512/876/876569.png"/>
-          <input type="input" id="searchInput" placeholder="Business or Category" onChange={ this.props.setSearchInput }/>
-          <input type="input" id="location" placeholder="Location" onChange={ this.props.setLocation }/>
+          <input type="input" name="searchInput" placeholder="Business or Category" onChange={ (e) => this.props.setInputValue(e) }/>
+          <input type="input" name="location" placeholder="Location" onChange={ (e) => this.props.setInputValue(e) }/>
           <input type="button" id="searchButton" onClick={ this.props.search }/>
         </section>
         {search}

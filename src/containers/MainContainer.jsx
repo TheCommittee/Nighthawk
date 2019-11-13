@@ -10,6 +10,10 @@ class MainContainer extends Component {
     super(props)
 
     this.state = {
+      // login components
+      formUsername: '',
+      formPassword: '',
+      username: '',
       // stateful components used for search bar and results
       location: '',
       searchInput: '',
@@ -36,7 +40,7 @@ class MainContainer extends Component {
       total: 50,
       
       // components for conditional rendering of containers
-      loginPage: false,
+      loginPage: true,
       signupPage: false,
       homePage: true,
       categoryPage: false,
@@ -47,7 +51,7 @@ class MainContainer extends Component {
     this.signupButton = this.signupButton.bind(this);
 
     this.setLocation = this.setLocation.bind(this);
-    this.setSearchInput = this.setSearchInput.bind(this);
+    this.setInputValue = this.setInputValue.bind(this);
     this.search = this.search.bind(this);
 
     this.selectVenue = this.selectVenue.bind(this);
@@ -80,8 +84,10 @@ class MainContainer extends Component {
     this.setState({ location: event.target.value });
   }
 
-  setSearchInput(event) {
-    this.setState({ searchInput: event.target.value });
+  setInputValue(event) {
+    const updateObject = {};
+    updateObject[event.target.name] = event.target.value;
+    this.setState(updateObject);
     // console.log(this.state.searchResults)
   }
 
@@ -196,7 +202,8 @@ class MainContainer extends Component {
     if (this.state.loginPage) {
       login = 
         <LoginPage 
-          signupButton = {this.signupButton}
+          setInputValue = {this.setInputValue}
+          signupButton={this.signupButton}
         />
     }
     
@@ -205,6 +212,7 @@ class MainContainer extends Component {
     if (this.state.signupPage) {
       signup = 
         <SignUpPage 
+          setInputValue = {this.setInputValue}
           loginButton={this.loginButton}
         />
     }
@@ -222,8 +230,8 @@ class MainContainer extends Component {
           <h1>Queue</h1>
         </div>
         <section id="home-page-search-bar">
-          <input type="input" id="searchInput" placeholder="Business or Category" onChange={this.setSearchInput}/>
-          <input type="input" id="location" placeholder="Location" onChange={this.setLocation}/>
+          <input type="input" name="searchInput" placeholder="Business or Category" onChange={(e) => this.setInputValue(e)}/>
+          <input type="input" name="location" placeholder="Location" onChange={(e) => this.setInputValue(e)}/>
           <input type="button" id="searchButton" onClick={this.search}/>
         </section>
       </div>
@@ -237,7 +245,7 @@ class MainContainer extends Component {
       category = 
       <CategoryContainer 
         // props for search bar
-        setSearchInput = {this.setSearchInput}
+        setInputValue = {this.setInputValue}
         setLocation = {this.setLocation}
         search = {this.search}
 
@@ -264,7 +272,7 @@ class MainContainer extends Component {
     venue = 
     <VenueContainer
       // props for search bar
-      setSearchInput = {this.setSearchInput}
+      setInputValue = {this.setInputValue}
       setLocation = {this.setLocation}
       search = {this.search}
 

@@ -1,14 +1,12 @@
 import React from 'react';
 
-const LoginPage = ({ signupButton }) => {
+const LoginPage = (props) => {
     return ( 
         <div>
-            <form action="/dbRouter/login" method="POST">
-                username: <input type="text" name="username" required/><br/>
-                password: <input type="password" name="password" required/><br/>
-                <input id="signup" type="submit" value="Login"></input>
-            </form>
-            <button onClick={ signupButton }>Sign-Up Here!</button>
+            <input type="text" name="formUsername" placeholder="Username" onChange={ (e) => props.setInputValue(e) } required/><br/>
+            <input type="password" name="formPassword" placeholder="password" onChange={ (e) => props.setInputValue(e) } required/><br/>
+            <div class="button" onClick={ props.setInputValue }>Submit</div>
+            <button onClick={ props.signupButton }>Sign-Up Here!</button>
         </div>
      );
 }
