@@ -82,26 +82,20 @@ class CategoryContainer extends Component {
       );
     });
 
-  if (this.props.categoryPage) {
-    search =
-    <div id="category-body">
-      <SearchDisplay
-        searchDisplayResults={searchDisplayResults}
-      />
-      <Map name={this.props.mapName} venueLocation={this.props.venueLocation} latitude={this.props.latitude} longitude={this.props.longitude} />
-    </div>
-  }
+    if (this.props.categoryPage) {
+      search =
+        <div id="category-body">
+          <SearchDisplay
+            searchDisplayResults={searchDisplayResults}
+          />
+          <Map name={this.props.mapName} venueLocation={this.props.venueLocation} latitude={this.props.latitude} longitude={this.props.longitude} />
+        </div>
+    }
 
 
     return (
       <div>
         <section className="search-bar">
-<<<<<<< HEAD
-          <img id="logo-pic-category" src="https://image.flaticon.com/icons/png/512/876/876569.png"/>
-          <input type="input" name="searchInput" placeholder="Business or Category" onChange={ (e) => this.props.setInputValue(e) }/>
-          <input type="input" name="location" placeholder="Location" onChange={ (e) => this.props.setInputValue(e) }/>
-          <input type="button" id="searchButton" onClick={ this.props.search }/>
-=======
           <img
             id="logo-pic-category"
             src="https://image.flaticon.com/icons/png/512/876/876569.png"
@@ -109,21 +103,22 @@ class CategoryContainer extends Component {
           <input
             type="input"
             id="searchInput"
+            name="searchInput"
             placeholder="Business or Category"
-            onChange={this.props.setSearchInput}
+            onChange={this.props.setInputValue}
           />
           <input
             type="input"
             id="location"
+            name="location"
             placeholder="Location"
-            onChange={this.props.setLocation}
+            onChange={this.props.setInputValue}
           />
           <input type="button" id="searchButton" onClick={this.props.search} />
->>>>>>> 529944f7284e379d6407925961f6656ce918bcfc
         </section>
         {search}
       </div>
-     );
+    );
 
   }
 }

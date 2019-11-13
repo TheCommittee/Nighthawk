@@ -3,18 +3,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 
 const dbRouter = require('./routes/dbRouter.js');
 const apiRouter = require('./routes/api');
 
 const PORT = 3000;
 
-//---
-const mongoUrl = 'mongodb+srv://scott2:ilovetesting@mcmello-cluster-2bzb4.mongodb.net/nighthawk';
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-const connection = mongoose.connection;
-//---
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -33,7 +27,7 @@ app.use('/', (req, res) => res.status(200).sendFile(path.resolve(__dirname, '../
 
 
 // 404 handler
-app.use('*', (req,res) => {
+app.use('*', (req, res) => {
   res.status(404).send('Not Found');
 });
 

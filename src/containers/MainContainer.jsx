@@ -11,10 +11,10 @@ class MainContainer extends Component {
     super(props);
 
     this.state = {
-      // login components
+      // user information
       formUsername: '',
       formPassword: '',
-      username: '',
+      userData: {},
       // stateful components used for search bar and results
       location: "",
       searchInput: "",
@@ -79,8 +79,8 @@ class MainContainer extends Component {
   }
   signupButton() {
     this.setState({
-      loginPage: false,
-      signupPage: true,
+      loginPage: true,
+      signupPage: false,
       homePage: false,
       categoryPage: false,
       venuePage: false
@@ -97,35 +97,33 @@ class MainContainer extends Component {
     const updateObject = {};
     updateObject[event.target.name] = event.target.value;
     this.setState(updateObject);
-    // console.log(this.state.searchResults)
   }
 
   handleLogin() {
-    // POST request to dbRouter/login
-    fetch('/dbRouter/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: this.state.formUsername,
-        password: this.state.formPassword,
-      })
-    })
-      .then(response => response.json())          // Response should be user data object
-      .then(data => console.log('signup just happened...'))
+    axios.post('/dbRouter/login', { username: this.state.formUsername, password: this.state.formPassword })
+      .then(response => {
+        if (response.data.userData != null) {
+          // console.log(response.data.userData);
+          this.setState({
+            userData: response.data.userData,
+            loginPage: false,
+          });
+        }
+      }) 
   }
 
   handleSignup() {
-    // POST request to dbRouter/signup
-    fetch('/dbRouter/signup', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          username: this.state.formUsername,
-          password: this.state.formPassword,
-        })
-      })
-        .then(response => response.json())          // Response should be user data object
-        .then(data => console.log('signup just happened...'))
+    axios.post('/dbRouter/signup', { username: this.state.formUsername, password: this.state.formPassword })
+      .then(response => {
+        if (response.data.userData != null) {
+          // console.log(response.data.userData);
+          this.setState({
+            userData: response.data.userData,
+            signupPage: false,
+            loginPage: false,
+          });
+        }
+      }) 
   }
 
   search() {
@@ -206,24 +204,24 @@ class MainContainer extends Component {
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
           console.log('this.state.favorites -->', this.state.favorites);
           axios.post('/addfavorite', {
-          restaurant_id: venue
-        });
-  break;
-} else {
-  console.log('IN ELSE STATEMENT');
-  let index = tempFavIds.indexOf(venue.id);
-  tempFav.splice(index, 1);
-  tempFavIds.splice(index, 1);
-  this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
-  console.log('this.state.favorites -->', this.state.favorites);
-  axios.delete('/removefavorite', {
-  restaurant_id: venue
-});
-// .then(this.setState({ favorites: tempFav }));
-}
-}
-}
-}
+            restaurant_id: venue
+          });
+          break;
+        } else {
+          console.log('IN ELSE STATEMENT');
+          let index = tempFavIds.indexOf(venue.id);
+          tempFav.splice(index, 1);
+          tempFavIds.splice(index, 1);
+          this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+          console.log('this.state.favorites -->', this.state.favorites);
+          axios.delete('/removefavorite', {
+            restaurant_id: venue
+          });
+          // .then(this.setState({ favorites: tempFav }));
+        }
+      }
+    }
+  }
 
 
 
@@ -282,23 +280,15 @@ class MainContainer extends Component {
     // conditional rendering for the login page
     let login = null;
     if (this.state.loginPage) {
-      login = 
-        <LoginPage 
-          setInputValue={this.setInputValue}
-          handleLogin={this.handleLogin}
-          signupButton={this.signupButton}
-        />
+
+      login = <LoginPage setInputValue={this.setInputValue} handleLogin={this.handleLogin} signupButton={this.signupButton} />;
     }
 
     // conditional rendering for the signup page
     let signup = null;
     if (this.state.signupPage) {
-      signup = 
-        <SignUpPage 
-          setInputValue={this.setInputValue}
-          handleSignup={this.handleSignup}
-          loginButton={this.loginButton}
-        />
+
+      signup = <SignUpPage setInputValue={this.setInputValue} handleSignup={this.handleSignup} loginButton={this.loginButton} />;
     }
 
     // conditional rendering for the homepage; default true (shows first)
@@ -318,87 +308,83 @@ class MainContainer extends Component {
             />
             <h1>Queue</h1>
           </div>
-          <div>
           <section id="home-page-search-bar">
             <input
               type="input"
               id="searchInput"
+              name="searchInput"
               placeholder="Business or Category"
-              onChange={this.setSearchInput}
+              onChange={this.setInputValue}
             />
             <input
               type="input"
               id="location"
+              name="location"
               placeholder="Location"
               onChange={this.setInputValue}
             />
             <input type="button" id="searchButton" onClick={this.search} />
           </section>
         </div>
-        <section id="home-page-search-bar">
-          <input type="input" name="searchInput" placeholder="Business or Category" onChange={(e) => this.setInputValue(e)}/>
-          <input type="input" name="location" placeholder="Location" onChange={(e) => this.setInputValue(e)}/>
-          <input type="button" id="searchButton" onClick={this.search}/>
-        </section>
-      </div>
-    )}
+      );
+    }
 
     // conditional rendering for the category page
     let category = null;
     if (this.state.categoryPage) {
       document.body.style.background = "url('')";
       category =
-      <CategoryContainer
-        // props for search bar
-        setInputValue = {this.setInputValue}
-        search = {this.search}
-        favorites={this.state.favorites}
-        addToFavorites={this.addToFavorites}
-        searchInput={this.state.searchInput}
-        location={this.state.location}
-        searchResults={this.state.searchResults}
-        mapName={this.state.mapName}
-        selectVenue={this.selectVenue}
-        waitTimes={this.state.waitTimes}
-        venueName={this.state.venueName}
-        latitude={this.state.latitude}
-        longitude={this.state.longitude}
-        venueLocation={this.state.venueLocation}
-        homePage={this.state.homePage}
-        categoryPage={this.state.categoryPage}
-        venuePage={this.state.venuePage}
-        current={this.state.current}
-      />
+        <CategoryContainer
+          // props for search bar
+          setInputValue={this.setInputValue}
+          search={this.search}
+          favorites={this.state.favorites}
+          addToFavorites={this.addToFavorites}
+          searchInput={this.state.searchInput}
+          location={this.state.location}
+          searchResults={this.state.searchResults}
+          mapName={this.state.mapName}
+          selectVenue={this.selectVenue}
+          waitTimes={this.state.waitTimes}
+          venueName={this.state.venueName}
+          latitude={this.state.latitude}
+          longitude={this.state.longitude}
+          venueLocation={this.state.venueLocation}
+          homePage={this.state.homePage}
+          categoryPage={this.state.categoryPage}
+          venuePage={this.state.venuePage}
+          current={this.state.current}
+        />
     }
 
     // conditional rendering for the venue page
-  let venue = null;
-  if (this.state.venuePage) {
-    venue =
-    <VenueContainer
-      // props for search bar
-      setInputValue = {this.setInputValue}
-      search = {this.search}
+    let venue = null;
+    if (this.state.venuePage) {
+      venue =
+        <VenueContainer
+          // props for search bar
+          setInputValue={this.setInputValue}
+          search={this.search}
 
-      searchInput={this.state.searchInput}
-      location={this.state.location}
-      searchResults={this.state.searchResults}
+          searchInput={this.state.searchInput}
+          location={this.state.location}
+          searchResults={this.state.searchResults}
 
-      // props for venue selection
-      venueId={this.state.venueId}
-      venueName={this.state.venueName}
-      venueUrl={this.state.venueUrl}
-      venueImage={this.state.venueImage}
-      venueLocation={this.state.venueLocation}
-      venuePhone={this.state.venuePhone}
-      venueWaitTimeList={this.state.venueWaitTimeList}
-      venueLatitude={this.state.venueLatitude}
-      venueLongitude={this.state.venueLongitude}
-      setWaitTime={this.setWaitTime}
-      addWaitTime={this.addWaitTime}
-      mapName={this.state.mapName}
-    />
-  }
+          // props for venue selection
+          venueId={this.state.venueId}
+          venueName={this.state.venueName}
+          venueUrl={this.state.venueUrl}
+          venueImage={this.state.venueImage}
+          venueLocation={this.state.venueLocation}
+          venuePhone={this.state.venuePhone}
+          venueWaitTimeList={this.state.venueWaitTimeList}
+          venueLatitude={this.state.venueLatitude}
+          venueLongitude={this.state.venueLongitude}
+          setWaitTime={this.setWaitTime}
+          addWaitTime={this.addWaitTime}
+          mapName={this.state.mapName}
+        />
+    }
 
 
     return (
