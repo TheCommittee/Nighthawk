@@ -4,6 +4,9 @@ import WaitTimesDisplay from '../components/WaitTimesDisplay.jsx';
 import '../css/VenuePage.css'
 
 const VenueContainer = (props) => {
+
+  const test = props.mapName.replace(/[^A-Za-z]/g, "")
+
   // render map and wait times
   return (
     <div>
@@ -22,7 +25,7 @@ const VenueContainer = (props) => {
             venueLocation = { props.venueLocation }
             venuePhone = { props.venuePhone }
           />
-          <WaitTimesDisplay 
+          <WaitTimesDisplay
             venueId = { props.venueId }
             venueWaitTimeList = { props.venueWaitTimeList }
             addWaitTime = { props.addWaitTime }
@@ -31,11 +34,12 @@ const VenueContainer = (props) => {
         </div>
 
         <div id="map">
-          <iframe 
-            width="500" 
-            height="400" 
+          <iframe
+            width="500"
+            height="400"
+            frameBorder="0"
             // #19 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-            src={`https://api.maptiler.com/maps/basic/?key=OeKji8TvwQYbzy8G5Pda#19/${props.venueLatitude}/${props.venueLongitude}/`}>
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBa3IwbgGlZ80JTt97JZnl63Rz23uQKrYE&q=${test}`}>
           </iframe>
         </div>
       </div>
