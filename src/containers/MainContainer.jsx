@@ -161,17 +161,17 @@ class MainContainer extends Component {
   }
 
   moveMap() {
-    let isScrolling;
-    window.addEventListener(
-      "scroll",
-      function(event) {
-        window.clearTimeout(isScrolling);
-        isScrolling = setTimeout(function() {
-          console.log("Scrolling has stopped.");
-        }, 66);
-      },
-      false
-    );
+    // let isScrolling;
+    // window.addEventListener(
+    //   "scroll",
+    //   function(event) {
+    //     window.clearTimeout(isScrolling);
+    //     isScrolling = setTimeout(function() {
+    //       console.log("Scrolling has stopped.");
+    //     }, 66);
+    //   },
+    //   false
+    // );
     let target = document.querySelectorAll(".list-item");
     let myItem = target[0];
     for (let i = 0; i < target.length; i++) {
@@ -188,7 +188,7 @@ class MainContainer extends Component {
       //   this.setState({ mapName: myItem });
       // }
     }
-    console.log(isScrolling);
+    // console.log(isScrolling);
   }
 
   addToFavorites(venue) {
@@ -294,7 +294,7 @@ class MainContainer extends Component {
     let home = null;
     if (this.state.homePage) {
       document.body.style.background =
-        "url('https://images.pexels.com/photos/1604200/pexels-photo-1604200.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')";
+        "url('https://i.ebayimg.com/images/g/Mh4AAOSwlUhbjBHg/s-l1600.jpg')";
       home = (
         <div id="home-content">
           {/* // uncomment to work on login and signup functionalities
@@ -304,7 +304,7 @@ class MainContainer extends Component {
               id="logo-pic"
               src="https://image.flaticon.com/icons/png/512/876/876569.png"
             />
-            <h1>Queue</h1>
+            <h1>Nighthawk</h1>
           </div>
           <section id="home-page-search-bar">
             <input
