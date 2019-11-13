@@ -79,18 +79,16 @@ class CategoryContainer extends Component {
     });
 
     if (this.props.categoryPage) {
-      search = (
+
+      search =
         <div id="category-body">
-          <SearchDisplay searchDisplayResults={searchDisplayResults} />
-          <Map
-            name={this.props.mapName}
-            venueLocation={this.props.venueLocation}
-            latitude={this.props.latitude}
-            longitude={this.props.longitude}
+          <SearchDisplay
+            searchDisplayResults={searchDisplayResults}
           />
+          <Map name={this.props.mapName} venueLocation={this.props.venueLocation} latitude={this.props.latitude} longitude={this.props.longitude} />
         </div>
-      );
     }
+
 
     return (
       <div>
@@ -102,20 +100,23 @@ class CategoryContainer extends Component {
           <input
             type="input"
             id="searchInput"
+            name="searchInput"
             placeholder="Business or Category"
-            onChange={this.props.setSearchInput}
+            onChange={this.props.setInputValue}
           />
           <input
             type="input"
             id="location"
+            name="location"
             placeholder="Location"
-            onChange={this.props.setLocation}
+            onChange={this.props.setInputValue}
           />
           <input type="button" id="searchButton" onClick={this.props.search} />
         </section>
         {search}
       </div>
     );
+
   }
 }
 
