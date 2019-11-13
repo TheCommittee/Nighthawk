@@ -3,13 +3,18 @@ import axios from 'axios';
 
 const Map = (props) => {
 
+    const test = props.name.replace(/[^A-Za-z]/g, "")
+
+
   return (
     <div id="map">
-      <iframe 
-        width="500" 
-        height="400" 
+        {console.log(test)}
+      <iframe
+        width="500"
+        height="400"
+        frameBorder="0"
         // #12 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-        src={`https://api.maptiler.com/maps/basic/?key=OeKji8TvwQYbzy8G5Pda#12/${props.latitude}/${props.longitude}/`}>
+        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBa3IwbgGlZ80JTt97JZnl63Rz23uQKrYE&q=${test}`}>
       </iframe>
     </div>
   )

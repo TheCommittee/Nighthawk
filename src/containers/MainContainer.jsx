@@ -14,7 +14,7 @@ class MainContainer extends Component {
       location: '',
       searchInput: '',
       searchResults: [],
-      
+
       // components used for map display
       latitude: '',
       longitude: '',
@@ -30,11 +30,12 @@ class MainContainer extends Component {
       venueLongitude: '',
       waitTime: 0,
       venueWaitTimeList: [],
+      mapName: '',
 
       // components for infinite scrolling functionality
       current: 25,
       total: 50,
-      
+
       // components for conditional rendering of containers
       loginPage: false,
       signupPage: false,
@@ -63,7 +64,7 @@ class MainContainer extends Component {
       homePage: false,
       categoryPage: false,
       venuePage: false,
-    })    
+    })
   }
   signupButton() {
     this.setState({
@@ -73,6 +74,11 @@ class MainContainer extends Component {
       categoryPage: false,
       venuePage: false,
     })
+  }
+
+  componentDidMount() {
+    const script = '//www.opentable.com/widget/reservation/loader?rid=109594&rid=4524&type=multi&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false';
+
   }
 
   // functions used for search bar
@@ -92,7 +98,7 @@ class MainContainer extends Component {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({searchInput: this.state.searchInput, location: this.state.location})
     })
-      .then(response => response.json())  
+      .then(response => response.json())
       .then(data => {
         const parsedData = JSON.parse(data);
         // console.log('PARSEDDATA: ', parsedData);
@@ -101,31 +107,33 @@ class MainContainer extends Component {
         // Coordinates used for map rendered in Category Container (List Page)
         const firstBusinessLatitude = parsedData.businesses[0].coordinates.latitude;
         const firstBusinessLongitude = parsedData.businesses[0].coordinates.longitude;
-        
+        const firstBusinessName = parsedData.businesses[0].name;
+
         const listOfBusinesses = [];
         // console.log(parsedData.businesses.length)
         if (this.state.current <= 50) {
           for (let i = 0; i < this.state.current; i += 1) {
             // console.log('LIST BUSINESSES -> ', listOfBusinesses)
             listOfBusinesses.push({
-              id: parsedData.businesses[i].id, 
-              name: parsedData.businesses[i].name, 
-              image: parsedData.businesses[i].image_url, 
+              id: parsedData.businesses[i].id,
+              name: parsedData.businesses[i].name,
+              image: parsedData.businesses[i].image_url,
               location: parsedData.businesses[i].location,
               category: parsedData.businesses[i].categories[0].title,
               latitude: parsedData.businesses[i].coordinates.latitude,
               longitude: parsedData.businesses[i].coordinates.longitude
             });
           }
-  
+
           // this.setState({ latitude: firstBusinessLatitude.toString(), longitude: firstBusinessLongitude.toString() })
-  
+
           this.setState(state => {
             return {
               latitude: firstBusinessLatitude.toString(),
               longitude: firstBusinessLongitude.toString(),
               searchResults: listOfBusinesses,
               current: state.current + 5,
+              mapName: firstBusinessName,
 
             }
           })
@@ -137,8 +145,8 @@ class MainContainer extends Component {
         homePage: false,
         categoryPage: true,
         venuePage: false,
-      })    
-    
+      })
+
   }
 
   // functions used for to select a specific venue on the category page to display on the venue page
@@ -152,7 +160,7 @@ class MainContainer extends Component {
     const venueLatitude = latitude;
     const venueLongitude = longitude;
 
-    this.setState({ 
+    this.setState({
       loginPage: false,
       signupPage: false,
       homePage: false,
@@ -194,17 +202,17 @@ class MainContainer extends Component {
     // conditional rendering for the login page
     let login = null;
     if (this.state.loginPage) {
-      login = 
-        <LoginPage 
+      login =
+        <LoginPage
           signupButton = {this.signupButton}
         />
     }
-    
+
     // conditional rendering for the signup page
     let signup = null;
     if (this.state.signupPage) {
-      signup = 
-        <SignUpPage 
+      signup =
+        <SignUpPage
           loginButton={this.loginButton}
         />
     }
@@ -213,7 +221,7 @@ class MainContainer extends Component {
     let home = null;
     if (this.state.homePage) {
       document.body.style.background = "url('https://images.pexels.com/photos/1604200/pexels-photo-1604200.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')";
-      home = 
+      home =
       <div id="home-content">
         {/* // uncomment to work on login and signup functionalities
         <button onClick={this.loginButton}>Login</button> */}
@@ -234,8 +242,8 @@ class MainContainer extends Component {
     let category = null;
     if (this.state.categoryPage) {
       document.body.style.background = "url('')";
-      category = 
-      <CategoryContainer 
+      category =
+      <CategoryContainer
         // props for search bar
         setSearchInput = {this.setSearchInput}
         setLocation = {this.setLocation}
@@ -244,13 +252,13 @@ class MainContainer extends Component {
         searchInput={this.state.searchInput}
         location={this.state.location}
         searchResults={this.state.searchResults}
-
+        mapName={this.state.mapName}
         selectVenue={this.selectVenue}
         waitTimes={this.state.waitTimes}
-
+        venueName={this.state.venueName}
         latitude={this.state.latitude}
         longitude={this.state.longitude}
-
+        venueLocation={this.state.venueLocation}
         homePage={this.state.homePage}
         categoryPage={this.state.categoryPage}
         venuePage={this.state.venuePage}
@@ -261,7 +269,7 @@ class MainContainer extends Component {
     // conditional rendering for the venue page
   let venue = null;
   if (this.state.venuePage) {
-    venue = 
+    venue =
     <VenueContainer
       // props for search bar
       setSearchInput = {this.setSearchInput}
@@ -284,9 +292,10 @@ class MainContainer extends Component {
       venueLongitude={this.state.venueLongitude}
       setWaitTime={this.setWaitTime}
       addWaitTime={this.addWaitTime}
+      mapName={this.state.mapName}
     />
   }
-    
+
     return (
       <div>
         {login}

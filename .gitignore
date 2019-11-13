@@ -63,3 +63,5 @@ typings/
 webpage.config.js
 
 package.json
+
+.idea/

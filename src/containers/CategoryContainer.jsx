@@ -7,7 +7,7 @@ import '../css/CategoryPage.css';
 class CategoryContainer extends Component {
   constructor(props) {
     super(props);
-    
+
     if (this.props.categoryPage && this.props.current < 50) {
       window.onscroll = debounce(() => {
         console.log('scrolling')
@@ -21,7 +21,7 @@ class CategoryContainer extends Component {
     }
   }
 
-  render() { 
+  render() {
     // render map and list of businessess from searchResults arr in the state
   let search = null;
   let searchDisplayResults = this.props.searchResults.map((element, i) => {
@@ -42,16 +42,16 @@ class CategoryContainer extends Component {
   })
 
   if (this.props.categoryPage) {
-    search =  
+    search =
     <div id="category-body">
       <SearchDisplay
         searchDisplayResults={searchDisplayResults}
       />
-      <Map latitude={this.props.latitude} longitude={this.props.longitude} />
+      <Map name={this.props.mapName} venueLocation={this.props.venueLocation} latitude={this.props.latitude} longitude={this.props.longitude} />
     </div>
   }
 
-    return ( 
+    return (
       <div>
         <section className="search-bar">
           <img id="logo-pic-category" src="https://image.flaticon.com/icons/png/512/876/876569.png"/>
@@ -60,9 +60,9 @@ class CategoryContainer extends Component {
           <input type="button" id="searchButton" onClick={ this.props.search }/>
         </section>
         {search}
-    </div>
+      </div>
      );
   }
 }
- 
+
 export default CategoryContainer;
