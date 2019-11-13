@@ -46,7 +46,10 @@ class MainContainer extends Component {
 
       // components for favoriting restaurants
       favorites: [],
-      favoriteIds: []
+      favoriteIds: [],
+
+      //openTableId
+      openTableId: undefined
     };
 
     this.loginButton = this.loginButton.bind(this);
@@ -60,6 +63,8 @@ class MainContainer extends Component {
     this.selectVenue = this.selectVenue.bind(this);
     this.setWaitTime = this.setWaitTime.bind(this);
     this.addWaitTime = this.addWaitTime.bind(this);
+
+    this.renderOpenTable = this.renderOpenTable.bind(this);
   }
 
   // functions used for login and signup
@@ -82,10 +87,15 @@ class MainContainer extends Component {
     });
   }
 
-  componentDidMount() {
-    const script = '//www.opentable.com/widget/reservation/loader?rid=109594&rid=4524&type=multi&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false';
+  renderOpenTable (value) {
+    const script = document.createElement("script");
 
+    script.src = `//www.opentable.com/widget/reservation/loader?rid=${value}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
+    script.async = true;
+
+    document.body.appendChild(script);
   }
+
 
   // functions used for search bar
   setLocation(event) {
@@ -354,6 +364,8 @@ class MainContainer extends Component {
       setWaitTime={this.setWaitTime}
       addWaitTime={this.addWaitTime}
       mapName={this.state.mapName}
+      renderOpenTable={this.renderOpenTable}
+      openTableId={this.state.openTableId}
     />
   }
 

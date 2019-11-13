@@ -16,7 +16,7 @@ body {
   text-align: center;
   min-height: 100%;
   width: 100%;
-  background: url('https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260') no-repeat center center fixed; 
+  background: url('https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -47,7 +47,7 @@ h1 {
   display: inline-block;
   margin-left: -2rem;
 }
-/* 
+/*
 #Q {
   color: white;
   padding: .3rem 3.5rem;
@@ -55,7 +55,7 @@ h1 {
   /* background: linear-gradient(to right, #20f5e3 0%, #000 180%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent; */
-/* } */ 
+/* } */
 
 #home-page-search-bar {
   display: flex;

@@ -5,7 +5,18 @@ import '../css/VenuePage.css'
 
 const VenueContainer = (props) => {
 
-  const test = props.mapName.replace(/[^A-Za-z]/g, "")
+  const openTableName = props.venueName.replace(/[é]/g, 'e');
+
+  const googleName = props.mapName.replace(/[^A-Za-z]/g, "")
+
+
+  fetch(`https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`)
+      .then(data => data.json())
+      .then(data => console.log(data.restaurants[0].id ))
+
+  console.log('word');
+
+
 
   // render map and wait times
   return (
@@ -39,7 +50,7 @@ const VenueContainer = (props) => {
             height="400"
             frameBorder="0"
             // #19 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBa3IwbgGlZ80JTt97JZnl63Rz23uQKrYE&q=${test}`}>
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBa3IwbgGlZ80JTt97JZnl63Rz23uQKrYE&q=${googleName}`}>
           </iframe>
         </div>
       </div>
