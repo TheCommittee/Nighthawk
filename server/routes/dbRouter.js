@@ -3,14 +3,12 @@ const dbController = require('../controllers/dbController.js');
 const router = express.Router();
 const path = require('path');
 
-router.post('/signup', dbController.createUser, (req, res) => {
-    console.log('successfully created new user')
-    res.status(200).sendFile(path.resolve(__dirname, '../../src/index.html'));
+router.post('/signup', dbController.bcryptify, dbController.createUser, dbController.verifyUser, (req, res) => {
+    res.status(200).json({ userData: res.locals.userData });
 })
 
-router.post('/login', dbController.verifyUser, (req, res) => {
-    console.log('user successfully logged in')
-    res.status(200).sendFile(path.resolve(__dirname, '../../src/index.html'));
+router.post('/login', dbController.bcryptify, dbController.verifyUser, (req, res) => {
+    res.status(200).json({ userData: res.locals.userData });
 })
 
 router.post('/getWaitTimes', dbController.getWaitTimes, (req, res) => {
