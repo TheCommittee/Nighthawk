@@ -82,17 +82,16 @@ class CategoryContainer extends Component {
       );
     });
 
-    if (this.props.categoryPage) {
-      search = (
-        <div id="category-body">
-          <SearchDisplay searchDisplayResults={searchDisplayResults} />
-          <Map
-            latitude={this.props.latitude}
-            longitude={this.props.longitude}
-          />
-        </div>
-      );
-    }
+  if (this.props.categoryPage) {
+    search =
+    <div id="category-body">
+      <SearchDisplay
+        searchDisplayResults={searchDisplayResults}
+      />
+      <Map name={this.props.mapName} venueLocation={this.props.venueLocation} latitude={this.props.latitude} longitude={this.props.longitude} />
+    </div>
+  }
+
 
     return (
       <div>
@@ -117,7 +116,8 @@ class CategoryContainer extends Component {
         </section>
         {search}
       </div>
-    );
+     );
+
   }
 }
 
