@@ -159,49 +159,41 @@ class MainContainer extends Component {
   }
 
   addToFavorites(venue) {
-    console.log("this is searchResults", this.state.searchResults);
+    console.log('this is searchResults', this.state.searchResults);
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
-    // console.log("VENUE ---> ", venue);
+    // console.log(“VENUE ---> “, venue);
     for (let i = 0; i < this.state.searchResults.length; i++) {
       if (this.state.searchResults[i].id === venue.id) {
         if (tempFavIds.indexOf(venue.id) === -1) {
           // console.log(this.state.searchResults[i].id);
           // console.log(venue.id);
-          console.log("IN IF STATEMENT");
+          console.log('IN IF STATEMENT');
           tempFav.push(venue);
           tempFavIds.push(venue.id);
-          console.log("TEMPFAV ---> ", tempFav);
+          console.log('TEMPFAV ---> ', tempFav);
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
-          console.log("this.state.favorites -->", this.state.favorites);
-          axios.post("/addfavorite", {
-            restaurant_id: venue
-          });
-          break;
-        } else {
-          console.log("IN ELSE STATEMENT");
-          let index = tempFavIds.indexOf(venue.id);
-          tempFav.splice(index, 1);
-          tempFavIds.splice(index, 1);
-          this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
-          console.log("this.state.favorites -->", this.state.favorites);
+          console.log('this.state.favorites -->', this.state.favorites);
+          axios.post('/addfavorite', {
+          restaurant_id: venue
+        });
+  break;
+} else {
+  console.log('IN ELSE STATEMENT');
+  let index = tempFavIds.indexOf(venue.id);
+  tempFav.splice(index, 1);
+  tempFavIds.splice(index, 1);
+  this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+  console.log('this.state.favorites -->', this.state.favorites);
+  axios.delete('/removefavorite', {
+  restaurant_id: venue
+});
+// .then(this.setState({ favorites: tempFav }));
+}
+}
+}
+}
 
-          axios.delete("/removefavorite", {
-            restaurant_id: venue
-          });
-          // .then(this.setState({ favorites: tempFav }));
-        }
-      }
-      this.setState({
-        loginPage: false,
-        signupPage: false,
-        homePage: false,
-        categoryPage: true,
-        venuePage: false,
-      })
-
-      }
-    }
 
 
 
@@ -316,7 +308,8 @@ class MainContainer extends Component {
         setSearchInput = {this.setSearchInput}
         setLocation = {this.setLocation}
         search = {this.search}
-
+        favorites={this.state.favorites}
+        addToFavorites={this.addToFavorites}
         searchInput={this.state.searchInput}
         location={this.state.location}
         searchResults={this.state.searchResults}
