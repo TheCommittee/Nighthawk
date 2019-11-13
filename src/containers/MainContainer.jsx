@@ -5,6 +5,7 @@ import VenueContainer from "./VenueContainer.jsx";
 import LoginPage from "../components/LoginPage.jsx";
 import SignUpPage from "../components/SignUpPage.jsx";
 import axios from "axios";
+import FavoritePageContainer from './FavoritePageContainer.jsx'
 
 class MainContainer extends Component {
   constructor(props) {
@@ -46,7 +47,8 @@ class MainContainer extends Component {
 
       // components for favoriting restaurants
       favorites: [],
-      favoriteIds: []
+      favoriteIds: [],
+      toggleFavorites: false,
     };
 
     this.loginButton = this.loginButton.bind(this);
@@ -60,6 +62,9 @@ class MainContainer extends Component {
     this.selectVenue = this.selectVenue.bind(this);
     this.setWaitTime = this.setWaitTime.bind(this);
     this.addWaitTime = this.addWaitTime.bind(this);
+
+    //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+    this.headerFavsBtn = this.headerFavsBtn.bind(this);
   }
 
   // functions used for login and signup
@@ -86,6 +91,18 @@ class MainContainer extends Component {
     const script = '//www.opentable.com/widget/reservation/loader?rid=109594&rid=4524&type=multi&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false';
 
   }
+  //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+  headerFavsBtn(){
+    this.setState(prevState => ({
+      toggleFavorites: !prevState.toggleFavorites,
+      loginPage: false,
+      signupPage: false,
+      categoryPage: false,
+      venuePage: false,
+    }))
+    // console.log('this is toggle',this.state.toggleFavorites)
+  }
+
 
   // functions used for search bar
   setLocation(event) {
@@ -94,7 +111,6 @@ class MainContainer extends Component {
 
   setSearchInput(event) {
     this.setState({ searchInput: event.target.value });
-    // console.log(this.state.searchResults)
   }
 
   search() {
@@ -160,6 +176,7 @@ class MainContainer extends Component {
 
   addToFavorites(venue) {
     console.log('this is searchResults', this.state.searchResults);
+    console.log('this is favorites:', this.state.favorites)
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
     // console.log(“VENUE ---> “, venue);
@@ -298,6 +315,24 @@ class MainContainer extends Component {
       );
     }
 
+    //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+    let favoritePage = null;
+        if (this.state.toggleFavorites){
+          favoritePage = 
+          <FavoritePageContainer 
+          favorites={this.state.favorites}
+          // venueId={this.state.venueId}
+          // venueName={this.state.venueName}
+          // venueUrl={this.state.venueUrl}
+          // venueImage={this.state.venueImage}
+          // venueLocation={this.state.venueLocation}
+          // venuePhone={this.state.venuePhone}
+          // venueLatitude={this.state.venueLatitude}
+          // venueLongitude={this.state.venueLongitude}
+          // mapName={this.state.mapName}
+          />
+        }
+
     // conditional rendering for the category page
     let category = null;
     if (this.state.categoryPage) {
@@ -324,8 +359,10 @@ class MainContainer extends Component {
         categoryPage={this.state.categoryPage}
         venuePage={this.state.venuePage}
         current={this.state.current}
+        headerFavsBtn={this.headerFavsBtn}
       />
     }
+
 
     // conditional rendering for the venue page
   let venue = null;
@@ -362,6 +399,7 @@ class MainContainer extends Component {
       <div>
         {login}
         {signup}
+        {favoritePage}
         {home}
         {category}
         {venue}

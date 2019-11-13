@@ -68,10 +68,6 @@ class CategoryContainer extends Component {
                 ? null
                 : "background-red"
             }
-            // id={
-            //   this.props.favoriteColoring ? "background-red" : "background-blue"
-            // }
-            // onClick={() => this.props.addToFavorites(element.id)}
             onClick={() => {
               this.props.addToFavorites(element);
             }}
@@ -113,6 +109,7 @@ class CategoryContainer extends Component {
             onChange={this.props.setLocation}
           />
           <input type="button" id="searchButton" onClick={this.props.search} />
+          <input type="button" id="headerFavsBtn" onClick={this.props.headerFavsBtn}/>
         </section>
         {search}
       </div>
