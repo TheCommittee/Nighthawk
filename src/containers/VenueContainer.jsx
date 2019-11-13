@@ -50,7 +50,7 @@ const VenueContainer = (props) => {
             height="400"
             frameBorder="0"
             // #19 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBa3IwbgGlZ80JTt97JZnl63Rz23uQKrYE&q=${googleName}`}>
+            src={`https://www.google.com/maps/embed/v1/place?key=PUTAPIKEYHERE&q=${googleName}`}>
           </iframe>
         </div>
       </div>
