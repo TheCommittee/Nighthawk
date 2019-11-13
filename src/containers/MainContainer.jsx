@@ -404,7 +404,6 @@ class MainContainer extends Component {
           venuePage={this.state.venuePage}
           current={this.state.current}
         />
-      );
 
     }
 
