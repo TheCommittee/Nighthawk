@@ -1,5 +1,7 @@
 const db = require('../models/models.js');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
+const path = require('path');
 
 const User = require('../models/userModel.js');
 
@@ -7,7 +9,8 @@ const mongoose = require('mongoose');
 
 // --- mongo connection
 
-const mongoUrl = 'mongodb+srv://scott2:ilovetesting@mcmello-cluster-2bzb4.mongodb.net/nighthawk';
+const mongoUrl = fs.readFileSync(path.resolve(__dirname, '../MongoPass.txt'), 'utf8');
+console.log('----------------------------', mongoUrl);
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 
