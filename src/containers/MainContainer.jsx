@@ -50,7 +50,10 @@ class MainContainer extends Component {
 
       // components for favoriting restaurants
       favorites: [],
-      favoriteIds: []
+      favoriteIds: [],
+
+      //openTableId
+      openTableId: undefined
     };
 
     this.loginButton = this.loginButton.bind(this);
@@ -65,6 +68,8 @@ class MainContainer extends Component {
     this.selectVenue = this.selectVenue.bind(this);
     this.setWaitTime = this.setWaitTime.bind(this);
     this.addWaitTime = this.addWaitTime.bind(this);
+
+    this.renderOpenTable = this.renderOpenTable.bind(this);
   }
 
   // functions used for login and signup
@@ -87,10 +92,15 @@ class MainContainer extends Component {
     });
   }
 
-  componentDidMount() {
-    const script = '//www.opentable.com/widget/reservation/loader?rid=109594&rid=4524&type=multi&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false';
+  renderOpenTable (value) {
+    const script = document.createElement("script");
 
+    script.src = `//www.opentable.com/widget/reservation/loader?rid=${value}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
+    script.async = true;
+
+    document.body.appendChild(script);
   }
+
 
   // functions used for search bar
   setInputValue(event) {
@@ -109,7 +119,7 @@ class MainContainer extends Component {
             loginPage: false,
           });
         }
-      }) 
+      })
   }
 
   handleSignup() {
@@ -123,7 +133,7 @@ class MainContainer extends Component {
             loginPage: false,
           });
         }
-      }) 
+      })
   }
 
   search() {
@@ -358,33 +368,37 @@ class MainContainer extends Component {
     }
 
     // conditional rendering for the venue page
-    let venue = null;
-    if (this.state.venuePage) {
-      venue =
-        <VenueContainer
-          // props for search bar
-          setInputValue={this.setInputValue}
-          search={this.search}
+  let venue = null;
+  if (this.state.venuePage) {
+    venue =
+    <VenueContainer
+      // props for search bar
+      setSearchInput = {this.setSearchInput}
+      setLocation = {this.setLocation}
+      search = {this.search}
 
-          searchInput={this.state.searchInput}
-          location={this.state.location}
-          searchResults={this.state.searchResults}
+      searchInput={this.state.searchInput}
+      location={this.state.location}
+      searchResults={this.state.searchResults}
 
-          // props for venue selection
-          venueId={this.state.venueId}
-          venueName={this.state.venueName}
-          venueUrl={this.state.venueUrl}
-          venueImage={this.state.venueImage}
-          venueLocation={this.state.venueLocation}
-          venuePhone={this.state.venuePhone}
-          venueWaitTimeList={this.state.venueWaitTimeList}
-          venueLatitude={this.state.venueLatitude}
-          venueLongitude={this.state.venueLongitude}
-          setWaitTime={this.setWaitTime}
-          addWaitTime={this.addWaitTime}
-          mapName={this.state.mapName}
-        />
-    }
+      // props for venue selection
+      venueId={this.state.venueId}
+      venueName={this.state.venueName}
+      venueUrl={this.state.venueUrl}
+      venueImage={this.state.venueImage}
+      venueLocation={this.state.venueLocation}
+      venuePhone={this.state.venuePhone}
+      venueWaitTimeList={this.state.venueWaitTimeList}
+      venueLatitude={this.state.venueLatitude}
+      venueLongitude={this.state.venueLongitude}
+      setWaitTime={this.setWaitTime}
+      addWaitTime={this.addWaitTime}
+      mapName={this.state.mapName}
+      renderOpenTable={this.renderOpenTable}
+      openTableId={this.state.openTableId}
+    />
+  }
+
 
 
     return (
