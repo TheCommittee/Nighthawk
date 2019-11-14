@@ -14,7 +14,6 @@ const Map = (props) => {
         height="400"
         frameBorder="0"
         // #12 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-
         src={`https://www.google.com/maps/embed/v1/place?key=putAPIKeyHere&q=${googleName}`}>
       </iframe>
     </div>
