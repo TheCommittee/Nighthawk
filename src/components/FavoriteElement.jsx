@@ -28,7 +28,6 @@ const FavoriteElement = props => {
         onClick={() => {props.deleteBtnInFavsPg(props.el);}}>
         delete
       </div>
-
     </React.Fragment>
   );
 };
