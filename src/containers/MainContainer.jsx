@@ -72,6 +72,7 @@ class MainContainer extends Component {
     this.moveMap = this.moveMap.bind(this);
     this.renderOpenTable = this.renderOpenTable.bind(this);
     this.headerFavsBtn = this.headerFavsBtn.bind(this);
+    this.deleteBtnInFavsPg = this.deleteBtnInFavsPg.bind(this);
   }
 
   // functions used for login and signup
@@ -111,7 +112,21 @@ class MainContainer extends Component {
       categoryPage: false,
       venuePage: false
     }));
-    // console.log('this is toggle',this.state.toggleFavorites)
+  }
+  // let index = tempFavIds.indexOf(venue.id);
+  // tempFav.splice(index, 1);
+  // tempFavIds.splice(index, 1);
+  // this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+  deleteBtnInFavsPg(id) {
+    // console.log('this is id', id)
+    const copyFavs = [...this.state.favorites];
+    const index = copyFavs.indexOf(id);
+    copyFavs.splice(index, 1);
+    this.setState({ favorites: copyFavs });
+    axios.post("/dbRouter/updateFav", {
+      username: this.state.formUsername,
+      favorites: this.state.favorites
+    });
   }
 
   // functions used for search bar
@@ -417,15 +432,7 @@ class MainContainer extends Component {
       favoritePage = (
         <FavoritePageContainer
           favorites={this.state.favorites}
-          // venueId={this.state.venueId}
-          // venueName={this.state.venueName}
-          // venueUrl={this.state.venueUrl}
-          // venueImage={this.state.venueImage}
-          // venueLocation={this.state.venueLocation}
-          // venuePhone={this.state.venuePhone}
-          // venueLatitude={this.state.venueLatitude}
-          // venueLongitude={this.state.venueLongitude}
-          // mapName={this.state.mapName}
+          deleteBtnInFavsPg={this.deleteBtnInFavsPg}
         />
       );
     }
