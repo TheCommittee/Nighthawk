@@ -6,7 +6,8 @@ const Map = props => {
   const googleName = props.name.replace(/[^A-Za-z]/g, "");
 
   return (
-    <div id="map">
+
+    <div id="map" className="iframeholder">
       <iframe
         title="googleMap"
         width="500"
