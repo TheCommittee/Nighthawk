@@ -95,13 +95,10 @@ class MainContainer extends Component {
     });
   }
 
+
   renderOpenTable(value) {
     const script = document.createElement("script");
 
-    script.src = `//www.opentable.com/widget/reservation/loader?rid=${value}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
-    script.async = true;
-
-    document.body.appendChild(script);
   }
   //SEONG ADDED**************************************************************************************************************************************************************************************************************************
   headerFavsBtn() {
@@ -179,7 +176,7 @@ class MainContainer extends Component {
       .then(response => response.json())
       .then(data => {
         const parsedData = JSON.parse(data);
-        // console.log('PARSEDDATA: ', parsedData);
+        console.log("PARSEDDATA: ", parsedData);
         // console.log('introspecting the data: ', parsedData.businesses[0])
 
         // Coordinates used for map rendered in Category Container (List Page)
@@ -423,6 +420,7 @@ class MainContainer extends Component {
 
     //SEONG ADDED**************************************************************************************************************************************************************************************************************************
     let favoritePage = null;
+
     if (this.state.toggleFavorites) {
       favoritePage = (
         <FavoritePageContainer
