@@ -2,7 +2,6 @@ import React from "react";
 import { tsPropertySignature } from "@babel/types";
 import "../css/CategoryPage.css";
 
-
 const FavoriteElement = props => {
   console.log("this is favoritepage", props.i);
   return (

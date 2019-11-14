@@ -1,30 +1,31 @@
 import "regenerator-runtime/runtime";
-import React, { useEffect, useState } from 'react';
-import VenueDetails from '../components/VenueDetails.jsx';
-import WaitTimesDisplay from '../components/WaitTimesDisplay.jsx';
-import '../css/VenuePage.css'
+import React, { useEffect, useState } from "react";
+import VenueDetails from "../components/VenueDetails.jsx";
+import WaitTimesDisplay from "../components/WaitTimesDisplay.jsx";
+import "../css/VenuePage.css";
+import config from './../../config' 
 
-const VenueContainer = (props) => {
-  const [openTableIdNum, setOpenTableIdNum] = useState('')
+const VenueContainer = props => {
+  const [openTableIdNum, setOpenTableIdNum] = useState("");
 
-  const openTableName = props.venueName.replace(/[é]/g, 'e');
+  const openTableName = props.venueName.replace(/[é]/g, "e");
 
-  const googleName = props.mapName.replace(/[^A-Za-z]/g, "")
+  const googleName = props.mapName.replace(/[^A-Za-z]/g, "");
 
   useEffect(() => {
     if (openTableIdNum !== '') {
-    console.log('use effect')
 
-    const script = document.createElement("script");
+      const script = document.createElement("script");
 
-    script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
-    script.async = false;
+      script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
+      script.async = false;
 
     document.body.appendChild(script);
   }
   }, [openTableIdNum])
 
    useEffect(() => {
+     console.log('in useeffect getting', openTableIdNum)
 
      const openId = fetch(`https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`)
          .then(data => data.json())
@@ -33,6 +34,21 @@ const VenueContainer = (props) => {
 //SEONG ADDED**********************************************************
 
 
+  useEffect(() => {
+    const openId = fetch(
+      `https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`
+    )
+      .then(data => {
+        data.json();
+        console.log(
+          "NOTE TO TEAM: data doesn't have a restaurants property but were calling `setOpenTableIdNum(data.restaurants[0].id)`. data --->",
+          data
+        );
+      })
+      .then(data => {
+        setOpenTableIdNum(data.restaurants[0].id);
+      });
+  }, []);
 
   // render map and wait times
   return (
@@ -41,6 +57,7 @@ const VenueContainer = (props) => {
         <img
           id="logo-pic-venue"
           src="https://image.flaticon.com/icons/png/512/876/876569.png"
+          alt="venue pic"
         />
         <input
           type="input"
@@ -66,12 +83,6 @@ const VenueContainer = (props) => {
             venueLocation={props.venueLocation}
             venuePhone={props.venuePhone}
           />
-          <WaitTimesDisplay
-            venueId={props.venueId}
-            venueWaitTimeList={props.venueWaitTimeList}
-            addWaitTime={props.addWaitTime}
-            setWaitTime={props.setWaitTime}
-          />
         </div>
 
         <div id="map">
@@ -80,7 +91,7 @@ const VenueContainer = (props) => {
             height="400"
             frameBorder="0"
             // #19 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOaMC0kkcCOIZQfF966NVFXcpdF91q08&q=${googleName}`}
+            src={`https://www.google.com/maps/embed/v1/place?key=${config.REACT_APP_NOT_SECRET_CODE}&q=${googleName}`}
           ></iframe>
         </div>
       </div>
