@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import FavoriteElement from "../components/FavoriteElement.jsx";
 import "../css/CategoryPage.css";
 
-
 const FavoritePageContainer = props => {
   return (
     <div>

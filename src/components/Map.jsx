@@ -8,6 +8,7 @@ const Map = props => {
   return (
     <div id="map">
       <iframe
+        title="googleMap"
         width="500"
         height="400"
         frameBorder="0"

@@ -41,10 +41,6 @@ class MainContainer extends Component {
       favorites: [],
       favoriteIds: [],
 
-      // components for infinite scrolling functionality
-      current: 25,
-      total: 50,
-
       // components for conditional rendering of containers
       loginPage: true,
       signupPage: false,
@@ -86,6 +82,7 @@ class MainContainer extends Component {
       venuePage: false
     });
   }
+
   signupButton() {
     this.setState({
       loginPage: false,
@@ -96,12 +93,10 @@ class MainContainer extends Component {
     });
   }
 
-
   renderOpenTable(value) {
     const script = document.createElement("script");
-
   }
-  //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+
   headerFavsBtn() {
     this.setState(prevState => ({
       toggleFavorites: !prevState.toggleFavorites,
@@ -242,34 +237,16 @@ class MainContainer extends Component {
 
 
   moveMap() {
-    // let isScrolling;
-    // window.addEventListener(
-    //   "scroll",
-    //   function(event) {
-    //     window.clearTimeout(isScrolling);
-    //     isScrolling = setTimeout(function() {
-    //       console.log("Scrolling has stopped.");
-    //     }, 66);
-    //   },
-    //   false
-    // );
+    console.log("in moveMap!");
     let target = document.querySelectorAll(".list-item");
     let myItem = target[0];
     for (let i = 0; i < target.length; i++) {
-      if (
-        target[i].getBoundingClientRect().top < 300
-        // &&
-        // target[i].getBoundingClientRect().top > 120
-      ) {
+      if (target[i].getBoundingClientRect().top < 300) {
         myItem = target[i].childNodes[1].data;
       }
       this.setState({ mapName: myItem });
-      // console.log("this.state.mapName -----> ", this.state.mapName);
-      // if (!isScrolling) {
-      //   this.setState({ mapName: myItem });
-      // }
+      console.log("MY ITEM --->", myItem);
     }
-    // console.log(isScrolling);
   }
 
   addToFavorites(e, venue) {
@@ -277,16 +254,11 @@ class MainContainer extends Component {
     console.log("in addToFavorites");
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
-    // console.log(“VENUE ---> “, venue);
     for (let i = 0; i < this.state.searchResults.length; i++) {
       if (this.state.searchResults[i].id === venue.id) {
         if (tempFavIds.indexOf(venue.id) === -1) {
-          // console.log(this.state.searchResults[i].id);
-          // console.log(venue.id);
-          // console.log("IN IF STATEMENT");
           tempFav.push(venue);
           tempFavIds.push(venue.id);
-          // console.log("TEMPFAV ---> ", tempFav);
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
 
           axios
@@ -295,7 +267,6 @@ class MainContainer extends Component {
               favorites: this.state.favorites
             })
             .then(response => {
-              // this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
               console.log(response);
             });
 
@@ -326,6 +297,8 @@ class MainContainer extends Component {
   // functions used for to select a specific venue on the category page to display on the venue page
   selectVenue(id, name, url, image, location, phone, latitude, longitude) {
     // console.log(id);
+    console.log("venueName --->", venueName);
+
     const venueId = id;
     const venueName = name;
     const venueUrl = url;
@@ -475,7 +448,6 @@ class MainContainer extends Component {
           homePage={this.state.homePage}
           categoryPage={this.state.categoryPage}
           venuePage={this.state.venuePage}
-          current={this.state.current}
           headerFavsBtn={this.headerFavsBtn}
         />
       );
