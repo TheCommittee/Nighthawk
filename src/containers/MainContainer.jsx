@@ -37,6 +37,9 @@ class MainContainer extends Component {
       waitTime: 0,
       venueWaitTimeList: [],
       mapName: "",
+      // components for favoriting restaurants
+      favorites: [],
+      favoriteIds: [],
 
       // components for infinite scrolling functionality
       current: 25,
@@ -49,9 +52,6 @@ class MainContainer extends Component {
       categoryPage: false,
       venuePage: false,
 
-      // components for favoriting restaurants
-      favorites: [],
-      favoriteIds: [],
 
       //openTableId
       openTableId: undefined
@@ -142,9 +142,15 @@ class MainContainer extends Component {
       .then(response => {
         if (response.data.userData != null) {
           // console.log(response.data.userData);
+          const newFavoriteIds = [];
+          response.data.userData.favorites.forEach(element => {
+            newFavoriteIds.push(element.id);
+          })
           this.setState({
             userData: response.data.userData,
-            loginPage: false
+            loginPage: false,
+            favorites: response.data.userData.favorites,
+            favoriteIds: newFavoriteIds,
           });
         }
       });
@@ -196,11 +202,21 @@ class MainContainer extends Component {
         if (this.state.current <= 50) {
           for (let i = 0; i < this.state.current; i += 1) {
             // console.log('LIST BUSINESSES -> ', listOfBusinesses)
+            let waitTime = 'Unknown';
+            if (parsedData.businesses[i].price) {
+              waitTime = Math.floor(Math.random() * 10 * parsedData.businesses[i].price.length);
+              if (waitTime < 10) {
+                waitTime = 'No Wait';
+              } else {
+                waitTime += ' min';
+              }
+            }
             listOfBusinesses.push({
               id: parsedData.businesses[i].id,
               name: parsedData.businesses[i].name,
               image: parsedData.businesses[i].image_url,
               location: parsedData.businesses[i].location,
+              waitTime,
               category: parsedData.businesses[i].categories[0].title,
               latitude: parsedData.businesses[i].coordinates.latitude,
               longitude: parsedData.businesses[i].coordinates.longitude
@@ -261,7 +277,8 @@ class MainContainer extends Component {
     // console.log(isScrolling);
   }
 
-  addToFavorites(venue) {
+  addToFavorites(e, venue) {
+    e.stopPropagation();
     console.log("in addToFavorites");
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
@@ -395,6 +412,7 @@ class MainContainer extends Component {
         <div id="home-content">
           {/* // uncomment to work on login and signup functionalities
         <button onClick={this.loginButton}>Login</button> */}
+          { this.state.userData.username && <h2 className="welcome">( Hi { this.state.userData.username } )</h2>}
           <div id="logo">
             <img
               id="logo-pic"

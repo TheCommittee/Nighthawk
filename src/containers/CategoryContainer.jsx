@@ -9,6 +9,7 @@ class CategoryContainer extends Component {
     super(props);
     // setTimeout(this.props.search(), 10000);
 
+    // this.props.search();
     // if (this.props.categoryPage && this.props.current < 50) {
     window.onscroll = debounce(() => {
       this.props.moveMap();
@@ -19,7 +20,6 @@ class CategoryContainer extends Component {
       //   document.documentElement.scrollTop >
       //   document.documentElement.scrollHeight - window.innerHeight - 2
       // ) {
-      this.props.search();
       // setTimeout(this.props.search(), 1000);
 
       // }
@@ -37,7 +37,7 @@ class CategoryContainer extends Component {
       return (
         <div id="list">
           <button
-            className="list-item"
+            className="list-item searchItem"
             key={i}
             onClick={() =>
               this.props.selectVenue(
@@ -63,9 +63,9 @@ class CategoryContainer extends Component {
             {element.location.zip_code}
             {element.phone}
             <br />
+            Wait Time: {element.waitTime}
             {/* // need to grab the unique id provided from the yelp api data search results that are saved in state. need to use it to save into our database */}
             {/* <button onClick={() => this.props.selectVenue(element.id, element.name, element.url, element.image, element.location, element.phone)}>Select</button> */}
-          </button>
           <div
             className="favbtn"
             id={
@@ -73,12 +73,13 @@ class CategoryContainer extends Component {
                 ? null
                 : "background-red"
             }
-            onClick={() => {
-              this.props.addToFavorites(element);
+            onClick={(e) => {
+              this.props.addToFavorites(e, element);
             }}
           >
             Favorite
           </div>
+          </button>
         </div>
       );
     });
