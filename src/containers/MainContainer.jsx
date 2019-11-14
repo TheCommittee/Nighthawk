@@ -201,6 +201,41 @@ class MainContainer extends Component {
             category: parsedData.businesses[i].categories[0].title,
             latitude: parsedData.businesses[i].coordinates.latitude,
             longitude: parsedData.businesses[i].coordinates.longitude
+        // console.log(parsedData.businesses.length)
+        if (this.state.current <= 50) {
+          for (let i = 0; i < this.state.current; i += 1) {
+            // console.log('LIST BUSINESSES -> ', listOfBusinesses)
+            let waitTime = 'Unknown';
+            if (parsedData.businesses[i].price) {
+              waitTime = Math.floor(Math.random() * 10 * parsedData.businesses[i].price.length);
+              if (waitTime < 10) {
+                waitTime = 'No Wait';
+              } else {
+                waitTime += ' min';
+              }
+            }
+            listOfBusinesses.push({
+              id: parsedData.businesses[i].id,
+              name: parsedData.businesses[i].name,
+              image: parsedData.businesses[i].image_url,
+              location: parsedData.businesses[i].location,
+              waitTime,
+              category: parsedData.businesses[i].categories[0].title,
+              latitude: parsedData.businesses[i].coordinates.latitude,
+              longitude: parsedData.businesses[i].coordinates.longitude
+            });
+          }
+
+          // this.setState({ latitude: firstBusinessLatitude.toString(), longitude: firstBusinessLongitude.toString() })
+
+          this.setState(state => {
+            return {
+              latitude: firstBusinessLatitude.toString(),
+              longitude: firstBusinessLongitude.toString(),
+              searchResults: listOfBusinesses,
+              current: state.current + 5,
+              mapName: firstBusinessName
+            };
           });
         }
         this.setState(state => {

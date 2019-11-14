@@ -13,7 +13,6 @@ const VenueContainer = (props) => {
 
   useEffect(() => {
     if (openTableIdNum !== '') {
-    console.log('use effect')
 
     const script = document.createElement("script");
 
@@ -63,12 +62,6 @@ const VenueContainer = (props) => {
             venueImage={props.venueImage}
             venueLocation={props.venueLocation}
             venuePhone={props.venuePhone}
-          />
-          <WaitTimesDisplay
-            venueId={props.venueId}
-            venueWaitTimeList={props.venueWaitTimeList}
-            addWaitTime={props.addWaitTime}
-            setWaitTime={props.setWaitTime}
           />
         </div>
 
