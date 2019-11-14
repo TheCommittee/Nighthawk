@@ -10,7 +10,6 @@ const mongoose = require('mongoose');
 // --- mongo connection
 
 const mongoUrl = fs.readFileSync(path.resolve(__dirname, '../MongoPass.txt'), 'utf8');
-console.log('----------------------------', mongoUrl);
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 
@@ -19,25 +18,19 @@ const connection = mongoose.connection;
 const dbController = {};
 
 dbController.bcryptify = (req, res, next) => {
-  res.locals.userInfo = {
-    username: req.body.username,
-    password: req.body.password,
-  }
-  // console.log('within dbController.bcryptify');
-  // console.log(`|${req.body.username}|`);
-  // console.log(`|${req.body.password}|`);
-  // bcrypt.hash(req.body.password, 10, function (err, hash) {
-  //   if (err) {
-  //     console.log(`Error in dbController.bcryptify: ${err}`);
-  //     return next(err);
-  //   } else {
-  //     res.locals.userInfo = {
-  //       username: req.body.username,
-  //       password: hash,
-  //     }
-  //     return next();
-  //   }
-  // });
+  console.log('within dbController.bcryptify');
+  bcrypt.hash(req.body.password, 10, function (err, hash) {
+    if (err) {
+      console.log(`Error in dbController.bcryptify: ${err}`);
+      return next(err);
+    } else {
+      res.locals.userInfo = {
+        username: req.body.username,
+        password: hash,
+      }
+      return next();
+    }
+  });
   return next();
 }
 
@@ -69,10 +62,8 @@ dbController.getUserData = (req, res, next) => {
 }
 
 dbController.verifyUser = (req, res, next) => {
-  const { username, password } = res.locals.userInfo;
-  // console.log('within verifyUser');
-  // console.log(`comparing...`);
-  // console.log(res.locals.userInfo);
+  const { username, password } = req.body;
+  console.log('within verifyUser');
   User.findOne({ username }, function (err, response) {
     console.log(response);
     if (err) {
@@ -82,27 +73,21 @@ dbController.verifyUser = (req, res, next) => {
       console.log(`verifyUser returned no search results for username: ${username}`);
       return next();
     } else {
-      if (response.password === password) {
-        res.locals.userData = response;
-      } else {
-        // console.log('Error, passwords do not match');
-        res.locals.userData = null;
-      }
-      // bcrypt.compare(password, response.password, function (err, compareResult) {
-      //   if (err) {
-      //     console.log(`Error in db.verifyUser.bcrypt.compare: ${err}`);
-      //     return next(err);
-      //   } else if (!compareResult) {
-      //     console.log(`Password for ${username} does not match database`);
-      //     return next();
-      //   } else {
-      //     res.locals.userData = response;
-      //     return next();
-      //   }
+      bcrypt.compare(req.body.password, response.password, function (err, compareResult) {
+        if (err) {
+          console.log(`Error in db.verifyUser.bcrypt.compare: ${err}`);
+          return next(err);
+        } else if (!compareResult) {
+          console.log(`Password for ${username} does not match database`);
+          return next();
+        } else {
+          res.locals.userData = response;
+          return next();
+        }
         return next();
-      // });
+      });
     }
-  });
+  })
 }
 
 // dbController.createUser = (req, res, next) => {

@@ -7,7 +7,7 @@ router.post('/signup', dbController.bcryptify, dbController.createUser, dbContro
     res.status(200).json({ userData: res.locals.userData });
 })
 
-router.post('/login', dbController.bcryptify, dbController.verifyUser, (req, res) => {
+router.post('/login', dbController.verifyUser, (req, res) => {
     res.status(200).json({ userData: res.locals.userData });
 })
 

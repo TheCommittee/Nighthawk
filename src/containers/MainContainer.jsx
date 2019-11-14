@@ -72,16 +72,16 @@ class MainContainer extends Component {
     this.setState({
       loginPage: true,
       signupPage: false,
-      homePage: false,
+      homePage: true,
       categoryPage: false,
       venuePage: false
     });
   }
   signupButton() {
     this.setState({
-      loginPage: true,
-      signupPage: false,
-      homePage: false,
+      loginPage: false,
+      signupPage: true,
+      homePage: true,
       categoryPage: false,
       venuePage: false
     });
@@ -389,8 +389,8 @@ class MainContainer extends Component {
 
     return (
       <div>
-        {login}
         {signup}
+        {login}
         {home}
         {category}
         {venue}
