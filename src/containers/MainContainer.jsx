@@ -37,6 +37,9 @@ class MainContainer extends Component {
       waitTime: 0,
       venueWaitTimeList: [],
       mapName: "",
+      // components for favoriting restaurants
+      favorites: [],
+      favoriteIds: [],
 
       // components for infinite scrolling functionality
       current: 25,
@@ -49,9 +52,6 @@ class MainContainer extends Component {
       categoryPage: false,
       venuePage: false,
 
-      // components for favoriting restaurants
-      favorites: [],
-      favoriteIds: [],
 
       //openTableId
       openTableId: undefined
@@ -146,9 +146,15 @@ class MainContainer extends Component {
       .then(response => {
         if (response.data.userData != null) {
           // console.log(response.data.userData);
+          const newFavoriteIds = [];
+          response.data.userData.favorites.forEach(element => {
+            newFavoriteIds.push(element.id);
+          })
           this.setState({
             userData: response.data.userData,
-            loginPage: false
+            loginPage: false,
+            favorites: response.data.userData.favorites,
+            favoriteIds: newFavoriteIds,
           });
         }
       });
@@ -173,7 +179,6 @@ class MainContainer extends Component {
   }
 
   search() {
-    // console.log('THIS STATE LOCATION : ', this.state.location);
     fetch("/api", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -185,45 +190,27 @@ class MainContainer extends Component {
       .then(response => response.json())
       .then(data => {
         const parsedData = JSON.parse(data);
-        console.log("PARSEDDATA: ", parsedData);
-        // console.log('introspecting the data: ', parsedData.businesses[0])
-
-        // Coordinates used for map rendered in Category Container (List Page)
-        const firstBusinessLatitude =
-          parsedData.businesses[0].coordinates.latitude;
-        const firstBusinessLongitude =
-          parsedData.businesses[0].coordinates.longitude;
-        const firstBusinessName = parsedData.businesses[0].name;
-
+        // console.log("PARSEDDATA: ", parsedData);
         const listOfBusinesses = [];
-        // console.log(parsedData.businesses.length)
-        if (this.state.current <= 50) {
-          for (let i = 0; i < this.state.current; i += 1) {
-            // console.log('LIST BUSINESSES -> ', listOfBusinesses)
-            listOfBusinesses.push({
-              id: parsedData.businesses[i].id,
-              name: parsedData.businesses[i].name,
-              image: parsedData.businesses[i].image_url,
-              location: parsedData.businesses[i].location,
-              category: parsedData.businesses[i].categories[0].title,
-              latitude: parsedData.businesses[i].coordinates.latitude,
-              longitude: parsedData.businesses[i].coordinates.longitude
-            });
-          }
-
-          // this.setState({ latitude: firstBusinessLatitude.toString(), longitude: firstBusinessLongitude.toString() })
-
-          this.setState(state => {
-            return {
-              latitude: firstBusinessLatitude.toString(),
-              longitude: firstBusinessLongitude.toString(),
-              searchResults: listOfBusinesses,
-              current: state.current + 5,
-              mapName: firstBusinessName
-            };
+        for (let i = 0; i < parsedData.businesses.length; i += 1) {
+          listOfBusinesses.push({
+            id: parsedData.businesses[i].id,
+            name: parsedData.businesses[i].name,
+            image: parsedData.businesses[i].image_url,
+            location: parsedData.businesses[i].location,
+            category: parsedData.businesses[i].categories[0].title,
+            latitude: parsedData.businesses[i].coordinates.latitude,
+            longitude: parsedData.businesses[i].coordinates.longitude
           });
-          // console.log(this.state.searchResults);
         }
+        this.setState(state => {
+          return {
+            searchResults: listOfBusinesses,
+            mapName: parsedData.businesses[0].name
+          };
+        });
+        // console.log(this.state.searchResults);
+        // }
       });
     this.setState({
       loginPage: false,
@@ -233,6 +220,8 @@ class MainContainer extends Component {
       venuePage: false
     });
   }
+
+
 
   moveMap() {
     // let isScrolling;
@@ -265,7 +254,8 @@ class MainContainer extends Component {
     // console.log(isScrolling);
   }
 
-  addToFavorites(venue) {
+  addToFavorites(e, venue) {
+    e.stopPropagation();
     console.log("in addToFavorites");
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
@@ -399,6 +389,7 @@ class MainContainer extends Component {
         <div id="home-content">
           {/* // uncomment to work on login and signup functionalities
         <button onClick={this.loginButton}>Login</button> */}
+          { this.state.userData.username && <h2 className="welcome">( Hi { this.state.userData.username } )</h2>}
           <div id="logo">
             <img
               id="logo-pic"
