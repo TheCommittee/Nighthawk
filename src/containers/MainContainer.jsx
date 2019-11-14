@@ -382,10 +382,6 @@ class MainContainer extends Component {
         <button onClick={this.loginButton}>Login</button> */}
           { this.state.userData.username && <h2 className="welcome">( Hi { this.state.userData.username } )</h2>}
           <div id="logo">
-            <img
-              id="logo-pic"
-              src="https://image.flaticon.com/icons/png/512/876/876569.png"
-            />
             <h1>Nighthawk</h1>
           </div>
           <section id="home-page-search-bar">

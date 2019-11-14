@@ -98,13 +98,10 @@ class CategoryContainer extends Component {
       );
     }
 
+
     return (
       <div>
         <section className="search-bar">
-          <img
-            id="logo-pic-category"
-            src="https://image.flaticon.com/icons/png/512/876/876569.png"
-          />
           <input
             type="input"
             id="searchInput"

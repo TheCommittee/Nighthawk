@@ -70,8 +70,6 @@ package.json
 
 .idea/
 
-API
-
 server/MongoPass.txt
 
 config.js
