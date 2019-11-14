@@ -38,10 +38,6 @@ class MainContainer extends Component {
       venueWaitTimeList: [],
       mapName: "",
 
-      // components for infinite scrolling functionality
-      current: 25,
-      total: 50,
-
       // components for conditional rendering of containers
       loginPage: true,
       signupPage: false,
@@ -72,6 +68,7 @@ class MainContainer extends Component {
     this.moveMap = this.moveMap.bind(this);
     this.renderOpenTable = this.renderOpenTable.bind(this);
     this.headerFavsBtn = this.headerFavsBtn.bind(this);
+    this.deleteBtnInFavsPg = this.deleteBtnInFavsPg.bind(this);
   }
 
   // functions used for login and signup
@@ -84,6 +81,7 @@ class MainContainer extends Component {
       venuePage: false
     });
   }
+
   signupButton() {
     this.setState({
       loginPage: false,
@@ -96,13 +94,8 @@ class MainContainer extends Component {
 
   renderOpenTable(value) {
     const script = document.createElement("script");
-
-    script.src = `//www.opentable.com/widget/reservation/loader?rid=${value}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
-    script.async = true;
-
-    document.body.appendChild(script);
   }
-  //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+
   headerFavsBtn() {
     this.setState(prevState => ({
       toggleFavorites: !prevState.toggleFavorites,
@@ -111,7 +104,17 @@ class MainContainer extends Component {
       categoryPage: false,
       venuePage: false
     }));
-    // console.log('this is toggle',this.state.toggleFavorites)
+  }
+
+  deleteBtnInFavsPg(id) {
+    const copyFavs = [...this.state.favorites];
+    const index = copyFavs.indexOf(id);
+    copyFavs.splice(index, 1);
+    this.setState({ favorites: copyFavs });
+    axios.post("/dbRouter/updateFav", {
+      username: this.state.formUsername,
+      favorites: this.state.favorites
+    });
   }
 
   // functions used for search bar
@@ -157,7 +160,6 @@ class MainContainer extends Component {
   }
 
   search() {
-    // console.log('THIS STATE LOCATION : ', this.state.location);
     fetch("/api", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -169,45 +171,30 @@ class MainContainer extends Component {
       .then(response => response.json())
       .then(data => {
         const parsedData = JSON.parse(data);
-        console.log("PARSEDDATA: ", parsedData);
-        // console.log('introspecting the data: ', parsedData.businesses[0])
-
-        // Coordinates used for map rendered in Category Container (List Page)
-        const firstBusinessLatitude =
-          parsedData.businesses[0].coordinates.latitude;
-        const firstBusinessLongitude =
-          parsedData.businesses[0].coordinates.longitude;
-        const firstBusinessName = parsedData.businesses[0].name;
+        // console.log("PARSEDDATA: ", parsedData);
 
         const listOfBusinesses = [];
-        // console.log(parsedData.businesses.length)
-        if (this.state.current <= 50) {
-          for (let i = 0; i < this.state.current; i += 1) {
-            // console.log('LIST BUSINESSES -> ', listOfBusinesses)
-            listOfBusinesses.push({
-              id: parsedData.businesses[i].id,
-              name: parsedData.businesses[i].name,
-              image: parsedData.businesses[i].image_url,
-              location: parsedData.businesses[i].location,
-              category: parsedData.businesses[i].categories[0].title,
-              latitude: parsedData.businesses[i].coordinates.latitude,
-              longitude: parsedData.businesses[i].coordinates.longitude
-            });
-          }
 
-          // this.setState({ latitude: firstBusinessLatitude.toString(), longitude: firstBusinessLongitude.toString() })
-
-          this.setState(state => {
-            return {
-              latitude: firstBusinessLatitude.toString(),
-              longitude: firstBusinessLongitude.toString(),
-              searchResults: listOfBusinesses,
-              current: state.current + 5,
-              mapName: firstBusinessName
-            };
+        for (let i = 0; i < parsedData.businesses.length; i += 1) {
+          listOfBusinesses.push({
+            id: parsedData.businesses[i].id,
+            name: parsedData.businesses[i].name,
+            image: parsedData.businesses[i].image_url,
+            location: parsedData.businesses[i].location,
+            category: parsedData.businesses[i].categories[0].title,
+            latitude: parsedData.businesses[i].coordinates.latitude,
+            longitude: parsedData.businesses[i].coordinates.longitude
           });
-          // console.log(this.state.searchResults);
         }
+
+        this.setState(state => {
+          return {
+            searchResults: listOfBusinesses,
+            mapName: parsedData.businesses[0].name
+          };
+        });
+        // console.log(this.state.searchResults);
+        // }
       });
     this.setState({
       loginPage: false,
@@ -219,50 +206,27 @@ class MainContainer extends Component {
   }
 
   moveMap() {
-    // let isScrolling;
-    // window.addEventListener(
-    //   "scroll",
-    //   function(event) {
-    //     window.clearTimeout(isScrolling);
-    //     isScrolling = setTimeout(function() {
-    //       console.log("Scrolling has stopped.");
-    //     }, 66);
-    //   },
-    //   false
-    // );
+    console.log("in moveMap!");
     let target = document.querySelectorAll(".list-item");
     let myItem = target[0];
     for (let i = 0; i < target.length; i++) {
-      if (
-        target[i].getBoundingClientRect().top < 300
-        // &&
-        // target[i].getBoundingClientRect().top > 120
-      ) {
+      if (target[i].getBoundingClientRect().top < 300) {
         myItem = target[i].childNodes[1].data;
       }
       this.setState({ mapName: myItem });
-      // console.log("this.state.mapName -----> ", this.state.mapName);
-      // if (!isScrolling) {
-      //   this.setState({ mapName: myItem });
-      // }
+      console.log("MY ITEM --->", myItem);
     }
-    // console.log(isScrolling);
   }
 
   addToFavorites(venue) {
     console.log("in addToFavorites");
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
-    // console.log(“VENUE ---> “, venue);
     for (let i = 0; i < this.state.searchResults.length; i++) {
       if (this.state.searchResults[i].id === venue.id) {
         if (tempFavIds.indexOf(venue.id) === -1) {
-          // console.log(this.state.searchResults[i].id);
-          // console.log(venue.id);
-          // console.log("IN IF STATEMENT");
           tempFav.push(venue);
           tempFavIds.push(venue.id);
-          // console.log("TEMPFAV ---> ", tempFav);
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
 
           axios
@@ -271,7 +235,6 @@ class MainContainer extends Component {
               favorites: this.state.favorites
             })
             .then(response => {
-              // this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
               console.log(response);
             });
 
@@ -302,6 +265,8 @@ class MainContainer extends Component {
   // functions used for to select a specific venue on the category page to display on the venue page
   selectVenue(id, name, url, image, location, phone, latitude, longitude) {
     // console.log(id);
+    console.log("venueName --->", venueName);
+
     const venueId = id;
     const venueName = name;
     const venueUrl = url;
@@ -413,19 +378,12 @@ class MainContainer extends Component {
 
     //SEONG ADDED**************************************************************************************************************************************************************************************************************************
     let favoritePage = null;
+
     if (this.state.toggleFavorites) {
       favoritePage = (
         <FavoritePageContainer
           favorites={this.state.favorites}
-          // venueId={this.state.venueId}
-          // venueName={this.state.venueName}
-          // venueUrl={this.state.venueUrl}
-          // venueImage={this.state.venueImage}
-          // venueLocation={this.state.venueLocation}
-          // venuePhone={this.state.venuePhone}
-          // venueLatitude={this.state.venueLatitude}
-          // venueLongitude={this.state.venueLongitude}
-          // mapName={this.state.mapName}
+          deleteBtnInFavsPg={this.deleteBtnInFavsPg}
         />
       );
     }
@@ -456,7 +414,6 @@ class MainContainer extends Component {
           homePage={this.state.homePage}
           categoryPage={this.state.categoryPage}
           venuePage={this.state.venuePage}
-          current={this.state.current}
           headerFavsBtn={this.headerFavsBtn}
         />
       );

@@ -23,7 +23,7 @@ const LoginPage = props => {
         Log In
       </div>
       <div className="entrybutton" onClick={props.signupButton}>
-        Sign Up Instead
+        Sign Up
       </div>
     </div>
   );

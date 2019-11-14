@@ -1,38 +1,37 @@
 import React, { Component } from "react";
 import SearchDisplay from "../components/SearchDisplay.jsx";
 import Map from "../components/Map.jsx";
-import debounce from "lodash.debounce";
+// import debounce from "lodash.debounce";
 import "../css/CategoryPage.css";
 
+let currentItem;
 class CategoryContainer extends Component {
   constructor(props) {
     super(props);
-    // setTimeout(this.props.search(), 10000);
-
-    // if (this.props.categoryPage && this.props.current < 50) {
-    window.onscroll = debounce(() => {
-      this.props.moveMap();
-      // console.log("scrolling");
-      // if (this.props.current >= 50) return;
-
-      // if (
-      //   document.documentElement.scrollTop >
-      //   document.documentElement.scrollHeight - window.innerHeight - 2
-      // ) {
-      this.props.search();
-      // setTimeout(this.props.search(), 1000);
-
-      // }
-    });
-    // }
-    // window.addEventListener("loadend", this.props.search());
+    this.props.search();
+    this.state = {
+      mapName: ""
+    };
+    this.setState = this.setState.bind(this);
   }
 
+  componentDidMount() {
+    document.onscroll = function() {
+      let target = document.querySelectorAll(".list-item");
+      currentItem = target[0];
+      for (let i = 0; i < target.length; i++) {
+        if (target[i].getBoundingClientRect().top < 300) {
+          currentItem = target[i].childNodes[1].data;
+        }
+      }
+      this.setState({ mapName: currentItem });
+      console.log("MY ITEM --->", this.state.mapName);
+    }.bind(this);
+  }
   render() {
     // render map and list of businessess from searchResults arr in the state
     let search = null;
     let searchDisplayResults = this.props.searchResults.map((element, i) => {
-      // console.log('search results', props.searchResults);
       // console.log("ELEMENT -> ", element);
       return (
         <div id="list">
@@ -52,7 +51,7 @@ class CategoryContainer extends Component {
               )
             }
           >
-            <img src={`${element.image}`} />
+            <img src={`${element.image}`} alt="venue pic" />
             {element.name}
             <br />
             {element.category}
@@ -82,13 +81,14 @@ class CategoryContainer extends Component {
         </div>
       );
     });
+    console.log("searchDisplayResults", searchDisplayResults);
 
     if (this.props.categoryPage) {
       search = (
         <div id="category-body">
           <SearchDisplay searchDisplayResults={searchDisplayResults} />
           <Map
-            name={this.props.mapName}
+            name={this.state.mapName || this.props.mapName}
             venueLocation={this.props.venueLocation}
             latitude={this.props.latitude}
             longitude={this.props.longitude}

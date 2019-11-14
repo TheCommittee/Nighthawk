@@ -1,20 +1,44 @@
-import React, { Component } from "react";
+import "regenerator-runtime/runtime";
+import React, { useEffect, useState } from "react";
 import VenueDetails from "../components/VenueDetails.jsx";
 import WaitTimesDisplay from "../components/WaitTimesDisplay.jsx";
 import "../css/VenuePage.css";
 
 const VenueContainer = props => {
+  const [openTableIdNum, setOpenTableIdNum] = useState("");
+
   const openTableName = props.venueName.replace(/[é]/g, "e");
 
   const googleName = props.mapName.replace(/[^A-Za-z]/g, "");
 
-  fetch(
-    `https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`
-  )
-    .then(data => data.json())
-    .then(data => console.log(data.restaurants[0].id));
+  useEffect(() => {
+    if (openTableIdNum !== "") {
+      console.log("use effect");
 
-  console.log("word");
+      const script = document.createElement("script");
+
+      script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
+      script.async = false;
+
+      document.body.appendChild(script);
+    }
+  }, [openTableIdNum]);
+
+  useEffect(() => {
+    const openId = fetch(
+      `https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`
+    )
+      .then(data => {
+        data.json();
+        console.log(
+          "NOTE TO TEAM: data doesn't have a restaurants property but were calling `setOpenTableIdNum(data.restaurants[0].id)`. data --->",
+          data
+        );
+      })
+      .then(data => {
+        setOpenTableIdNum(data.restaurants[0].id);
+      });
+  }, []);
 
   // render map and wait times
   return (
@@ -23,6 +47,7 @@ const VenueContainer = props => {
         <img
           id="logo-pic-venue"
           src="https://image.flaticon.com/icons/png/512/876/876569.png"
+          alt="venue pic"
         />
         <input
           type="input"
@@ -40,6 +65,7 @@ const VenueContainer = props => {
       </section>
       <div id="venue-page">
         <div id="venue-details-column">
+          {/*<script type='text/javascript' src='//www.opentable.com/widget/reservation/loader?rid=346594&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false'></script>*/}
           <VenueDetails
             venueName={props.venueName}
             venueUrl={props.venueUrl}
@@ -61,7 +87,8 @@ const VenueContainer = props => {
             height="400"
             frameBorder="0"
             // #19 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-            src={`https://www.google.com/maps/embed/v1/place?key=putAPIKeyHere&q=${googleName}`}
+            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOaMC0kkcCOIZQfF966NVFXcpdF91q08&q=${googleName}`}
+            title="googleMap"
           ></iframe>
         </div>
       </div>
