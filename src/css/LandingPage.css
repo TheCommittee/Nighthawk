@@ -97,7 +97,16 @@ input {
 }
 
 .button {
-  padding: 0.5em 2em;
+  width: 150px;
   background: white;
+  padding: 0.5em 0.5em;
   margin: 1em;
+  border-radius: 5px;
+  display: inline-block;
+  text-align: center;
+}
+
+.loginItem {
+  display: flex;
+  justify-content: center;
 }

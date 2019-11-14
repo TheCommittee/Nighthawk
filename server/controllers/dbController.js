@@ -1,16 +1,19 @@
-const db = require('../models/models.js');
-const bcrypt = require('bcryptjs');
-const fs = require('fs');
-const path = require('path');
+const db = require("../models/models.js");
+const bcrypt = require("bcryptjs");
+const fs = require("fs");
+const path = require("path");
 
-const User = require('../models/userModel.js');
+const User = require("../models/userModel.js");
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // --- mongo connection
 
-const mongoUrl = fs.readFileSync(path.resolve(__dirname, '../MongoPass'), 'utf8');
-console.log('----------------------------', mongoUrl);
+const mongoUrl = fs.readFileSync(
+  path.resolve(__dirname, "../MongoPass.txt"),
+  "utf8"
+);
+console.log("----------------------------", mongoUrl);
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 
@@ -21,8 +24,8 @@ const dbController = {};
 dbController.bcryptify = (req, res, next) => {
   res.locals.userInfo = {
     username: req.body.username,
-    password: req.body.password,
-  }
+    password: req.body.password
+  };
   // console.log('within dbController.bcryptify');
   // console.log(`|${req.body.username}|`);
   // console.log(`|${req.body.password}|`);
@@ -39,12 +42,12 @@ dbController.bcryptify = (req, res, next) => {
   //   }
   // });
   return next();
-}
+};
 
 dbController.createUser = (req, res, next) => {
-  console.log('hit createUser controller');
+  console.log("hit createUser controller");
   const { username, password } = res.locals.userInfo;
-  User.create({ username, password }, function (err, response) {
+  User.create({ username, password }, function(err, response) {
     if (err) {
       console.log(`Error in dbController.createUser: ${err}`);
       return next(err);
@@ -53,12 +56,12 @@ dbController.createUser = (req, res, next) => {
       return next();
     }
   });
-}
+};
 
 dbController.getUserData = (req, res, next) => {
   const { username } = req.body;
-  console.log('hit dbController.getUserData');
-  User.findOne({ username }, function (err, response) {
+  console.log("hit dbController.getUserData");
+  User.findOne({ username }, function(err, response) {
     if (err) {
       console.log(`Error in dbController.getUserData: ${err}`);
       return next(err);
@@ -66,20 +69,22 @@ dbController.getUserData = (req, res, next) => {
       res.locals.userData = response;
     }
   });
-}
+};
 
 dbController.verifyUser = (req, res, next) => {
   const { username, password } = res.locals.userInfo;
   // console.log('within verifyUser');
   // console.log(`comparing...`);
   // console.log(res.locals.userInfo);
-  User.findOne({ username }, function (err, response) {
+  User.findOne({ username }, function(err, response) {
     console.log(response);
     if (err) {
       console.log(`Error in dbController.verifyUser: ${err}`);
       return next(err);
     } else if (response === null) {
-      console.log(`verifyUser returned no search results for username: ${username}`);
+      console.log(
+        `verifyUser returned no search results for username: ${username}`
+      );
       return next();
     } else {
       if (response.password === password) {
@@ -99,11 +104,34 @@ dbController.verifyUser = (req, res, next) => {
       //     res.locals.userData = response;
       //     return next();
       //   }
-        return next();
+      return next();
       // });
     }
   });
-}
+};
+
+dbController.updateFav = (req, res, next) => {
+  console.log("IN dbController.addfavorite", req.body);
+  const { favorites, username } = req.body;
+
+  // console.log("USERNAME", username);
+
+  User.findOneAndUpdate(
+    { username: username },
+    { favorites: favorites },
+    { new: true },
+    (err, data) => {
+      if (err) {
+        return next(err);
+      } else {
+        res.locals.favorites = data;
+        return next();
+      }
+    }
+  );
+};
+
+dbController.removefavorite = (req, res, next) => {};
 
 // dbController.createUser = (req, res, next) => {
 //   const { username, password } = res.locals.userInfo;
@@ -145,14 +173,13 @@ dbController.addVenue = async (req, res, next) => {
     // const params = [ req.body.venueId, req.body.venueName ];
     const result = await db.query(queryStr, [venueId, venueName]);
     return next();
-  }
-  catch (err) {
+  } catch (err) {
     next({
       log: `dbController.addVenue: ERROR: ${err}`,
-      message: { err: 'Error occurred in dbController.addVenue.' }
+      message: { err: "Error occurred in dbController.addVenue." }
     });
   }
-}
+};
 
 // issue with duplicate unique primary key for venue; does adding a findVenue method or joining tables help fix this?
 
@@ -170,13 +197,13 @@ dbController.addWaitTime = (req, res, next) => {
     if (err) {
       return next({
         log: `dbController.addWaitTime: ERROR: ${err}`,
-        message: { err: 'Error occurred in dbController.addWaitTime.' }
+        message: { err: "Error occurred in dbController.addWaitTime." }
       });
     }
     res.locals.results = data;
     // console.log(res.locals.results);
     return next();
-  })
+  });
 
   // need to add async before (req, resp, next) if doing below method
   // try {
@@ -197,7 +224,7 @@ dbController.addWaitTime = (req, res, next) => {
   //         message: { err: 'Error occurred in dbController.addWaitTime.' }
   //     });
   // }
-}
+};
 
 dbController.getWaitTimes = async (req, res, next) => {
   const { venueId } = req.body;
@@ -212,13 +239,12 @@ dbController.getWaitTimes = async (req, res, next) => {
     const result = await db.query(queryStr);
     res.locals.results = result.rows;
     return next();
-  }
-  catch (err) {
+  } catch (err) {
     next({
       log: `dbController.getWaitTimes: ERROR: ${err}`,
-      message: { err: 'Error occurred in dbController.getWaitTimes.' }
+      message: { err: "Error occurred in dbController.getWaitTimes." }
     });
   }
-}
+};
 
 module.exports = dbController;
