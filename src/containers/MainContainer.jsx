@@ -169,7 +169,7 @@ class MainContainer extends Component {
       .then(response => response.json())
       .then(data => {
         const parsedData = JSON.parse(data);
-        // console.log('PARSEDDATA: ', parsedData);
+        console.log("PARSEDDATA: ", parsedData);
         // console.log('introspecting the data: ', parsedData.businesses[0])
 
         // Coordinates used for map rendered in Category Container (List Page)

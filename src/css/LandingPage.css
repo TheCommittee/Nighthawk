@@ -80,6 +80,14 @@ input {
   font-family: "Montserrat", sans-serif;
 }
 
+#headerFavsBtn {
+  width: 15rem;
+  color: rgb(179, 67, 67);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  line-height: 12px;
+  vertical-align: top;
+}
 #location {
   width: 30rem;
   font-family: "Montserrat", sans-serif;
