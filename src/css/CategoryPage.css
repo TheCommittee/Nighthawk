@@ -31,6 +31,7 @@ body {
   color: rgb(179, 67, 67);
   display: inline-block;
   text-align: center;
+  cursor: pointer;
 }
 .search-bar {
   position: fixed;
@@ -72,6 +73,7 @@ button {
   height: 25rem;
   width: 45rem;
   transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 img {

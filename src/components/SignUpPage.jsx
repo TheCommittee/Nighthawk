@@ -2,7 +2,7 @@ import React from "react";
 
 const SignUpPage = props => {
   return (
-    <div>
+    <div className="entryitems">
       <input
         type="text"
         name="formUsername"
@@ -19,7 +19,7 @@ const SignUpPage = props => {
         required
       />
       <br />
-      <div className="button" onClick={props.loginButton}>
+      <div className="entrybutton" onClick={props.loginButton}>
         Login Instead
       </div>
     </div>
