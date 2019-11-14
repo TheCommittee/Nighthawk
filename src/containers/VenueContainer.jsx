@@ -13,7 +13,6 @@ const VenueContainer = (props) => {
 
   useEffect(() => {
     if (openTableIdNum !== '') {
-    console.log('use effect')
 
     const script = document.createElement("script");
 
