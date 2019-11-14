@@ -113,6 +113,7 @@ class CategoryContainer extends Component {
             onChange={this.props.setInputValue}
           />
           <input type="button" id="searchButton" onClick={this.props.search} />
+          <input type="button" id="headerFavsBtn" onClick={this.props.headerFavsBtn}/>
         </section>
         {search}
       </div>

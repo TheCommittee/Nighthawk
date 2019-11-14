@@ -19,8 +19,8 @@ const SignUpPage = props => {
         required
       />
       <br />
-      <div className="button" onClick={props.handleSignup}>
-        Sign Up
+      <div className="button" onClick={props.loginButton}>
+        Login Instead
       </div>
     </div>
   );
