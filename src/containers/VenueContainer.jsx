@@ -30,6 +30,8 @@ const VenueContainer = (props) => {
          .then(data => data.json())
          .then((data) => setOpenTableIdNum(data.restaurants[0].id))
   }, [])
+//SEONG ADDED**********************************************************
+
 
 
   // render map and wait times
