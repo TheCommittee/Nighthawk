@@ -3,14 +3,15 @@ import React, { useEffect, useState } from "react";
 import VenueDetails from "../components/VenueDetails.jsx";
 import WaitTimesDisplay from "../components/WaitTimesDisplay.jsx";
 import "../css/VenuePage.css";
-import config from "./../../config";
+
+import config from './../../config'
 
 const VenueContainer = props => {
   const [openTableIdNum, setOpenTableIdNum] = useState("");
 
   const openTableName = props.venueName.replace(/[é]/g, "e");
 
-  const googleName = props.mapName.replace(/[^A-Za-z]/g, "");
+  const googleName = props.venueName.replace(/[^A-Za-z]/g, "");
 
   useEffect(() => {
     if (openTableIdNum !== "") {

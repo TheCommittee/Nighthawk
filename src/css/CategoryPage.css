@@ -10,6 +10,18 @@
   padding: 0;
 }
 
+@keyframes seeNow {
+  100% {
+    opacity: 1;
+  }
+}
+
+.iframeholder {
+  animation: seeNow 0.1s 2s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
 body {
   font-size: 1.6rem;
   min-height: 100%;
