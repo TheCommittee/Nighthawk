@@ -63,6 +63,7 @@ class CategoryContainer extends Component {
             {/* <button onClick={() => this.props.selectVenue(element.id, element.name, element.url, element.image, element.location, element.phone)}>Select</button> */}
           </button>
           <div
+            className="favbtn"
             id={
               this.props.favorites.indexOf(element) === -1
                 ? null
@@ -72,7 +73,7 @@ class CategoryContainer extends Component {
               this.props.addToFavorites(element);
             }}
           >
-            Add to Favorites
+            Favorite
           </div>
         </div>
       );

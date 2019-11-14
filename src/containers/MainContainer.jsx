@@ -5,7 +5,7 @@ import VenueContainer from "./VenueContainer.jsx";
 import LoginPage from "../components/LoginPage.jsx";
 import SignUpPage from "../components/SignUpPage.jsx";
 import axios from "axios";
-import FavoritePageContainer from './FavoritePageContainer.jsx'
+import FavoritePageContainer from "./FavoritePageContainer.jsx";
 
 class MainContainer extends Component {
   constructor(props) {
@@ -13,8 +13,8 @@ class MainContainer extends Component {
 
     this.state = {
       // user information
-      formUsername: '',
-      formPassword: '',
+      formUsername: "",
+      formPassword: "",
       userData: {},
       // stateful components used for search bar and results
       location: "",
@@ -94,8 +94,7 @@ class MainContainer extends Component {
     });
   }
 
-
-  renderOpenTable (value) {
+  renderOpenTable(value) {
     const script = document.createElement("script");
 
     script.src = `//www.opentable.com/widget/reservation/loader?rid=${value}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
@@ -104,18 +103,16 @@ class MainContainer extends Component {
     document.body.appendChild(script);
   }
   //SEONG ADDED**************************************************************************************************************************************************************************************************************************
-  headerFavsBtn(){
+  headerFavsBtn() {
     this.setState(prevState => ({
       toggleFavorites: !prevState.toggleFavorites,
       loginPage: false,
       signupPage: false,
       categoryPage: false,
-      venuePage: false,
-    }))
+      venuePage: false
+    }));
     // console.log('this is toggle',this.state.toggleFavorites)
   }
-
-
 
   // functions used for search bar
   setInputValue(event) {
@@ -125,30 +122,38 @@ class MainContainer extends Component {
   }
 
   handleLogin() {
-    axios.post('/dbRouter/login', { username: this.state.formUsername, password: this.state.formPassword })
+    axios
+      .post("/dbRouter/login", {
+        username: this.state.formUsername,
+        password: this.state.formPassword
+      })
       .then(response => {
         if (response.data.userData != null) {
           // console.log(response.data.userData);
           this.setState({
             userData: response.data.userData,
-            loginPage: false,
+            loginPage: false
           });
         }
-      })
+      });
   }
 
   handleSignup() {
-    axios.post('/dbRouter/signup', { username: this.state.formUsername, password: this.state.formPassword })
+    axios
+      .post("/dbRouter/signup", {
+        username: this.state.formUsername,
+        password: this.state.formPassword
+      })
       .then(response => {
         if (response.data.userData != null) {
           // console.log(response.data.userData);
           this.setState({
             userData: response.data.userData,
             signupPage: false,
-            loginPage: false,
+            loginPage: false
           });
         }
-      })
+      });
   }
 
   search() {
@@ -214,17 +219,17 @@ class MainContainer extends Component {
   }
 
   moveMap() {
-    let isScrolling;
-    window.addEventListener(
-      "scroll",
-      function(event) {
-        window.clearTimeout(isScrolling);
-        isScrolling = setTimeout(function() {
-          console.log("Scrolling has stopped.");
-        }, 66);
-      },
-      false
-    );
+    // let isScrolling;
+    // window.addEventListener(
+    //   "scroll",
+    //   function(event) {
+    //     window.clearTimeout(isScrolling);
+    //     isScrolling = setTimeout(function() {
+    //       console.log("Scrolling has stopped.");
+    //     }, 66);
+    //   },
+    //   false
+    // );
     let target = document.querySelectorAll(".list-item");
     let myItem = target[0];
     for (let i = 0; i < target.length; i++) {
@@ -241,11 +246,11 @@ class MainContainer extends Component {
       //   this.setState({ mapName: myItem });
       // }
     }
-    console.log(isScrolling);
+    // console.log(isScrolling);
   }
 
   addToFavorites(venue) {
-    console.log("this is searchResults", this.state.searchResults);
+    console.log("in addToFavorites");
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
     // console.log(“VENUE ---> “, venue);
@@ -254,35 +259,45 @@ class MainContainer extends Component {
         if (tempFavIds.indexOf(venue.id) === -1) {
           // console.log(this.state.searchResults[i].id);
           // console.log(venue.id);
-          console.log("IN IF STATEMENT");
+          // console.log("IN IF STATEMENT");
           tempFav.push(venue);
           tempFavIds.push(venue.id);
-          console.log("TEMPFAV ---> ", tempFav);
+          // console.log("TEMPFAV ---> ", tempFav);
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
 
-          console.log('this.state.favorites -->', this.state.favorites);
-          axios.post('/addfavorite', {
-            restaurant_id: venue
-          });
+          axios
+            .post("/dbRouter/updateFav", {
+              username: this.state.formUsername,
+              favorites: this.state.favorites
+            })
+            .then(response => {
+              // this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+              console.log(response);
+            });
+
+          console.log("this.state.favorites -->", this.state.favorites);
           break;
         } else {
-
-          console.log('IN ELSE STATEMENT');
+          console.log("IN ELSE STATEMENT");
           let index = tempFavIds.indexOf(venue.id);
           tempFav.splice(index, 1);
           tempFavIds.splice(index, 1);
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
 
-          console.log('this.state.favorites -->', this.state.favorites);
-          axios.delete('/removefavorite', {
-            restaurant_id: venue
-          });
           // .then(this.setState({ favorites: tempFav }));
+          axios
+            .post("/dbRouter/updateFav", {
+              username: this.state.formUsername,
+              favorites: this.state.favorites
+            })
+            .then(response => {
+              console.log(response);
+              // this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+            });
         }
       }
     }
   }
-
 
   // functions used for to select a specific venue on the category page to display on the venue page
   selectVenue(id, name, url, image, location, phone, latitude, longitude) {
@@ -338,24 +353,32 @@ class MainContainer extends Component {
     // conditional rendering for the login page
     let login = null;
     if (this.state.loginPage) {
-
-
-      login = <LoginPage setInputValue={this.setInputValue} handleLogin={this.handleLogin} signupButton={this.signupButton} />;
+      login = (
+        <LoginPage
+          setInputValue={this.setInputValue}
+          handleLogin={this.handleLogin}
+          signupButton={this.signupButton}
+        />
+      );
     }
 
     // conditional rendering for the signup page
     let signup = null;
     if (this.state.signupPage) {
-
-
-      signup = <SignUpPage setInputValue={this.setInputValue} handleSignup={this.handleSignup} loginButton={this.loginButton} />;
+      signup = (
+        <SignUpPage
+          setInputValue={this.setInputValue}
+          handleSignup={this.handleSignup}
+          loginButton={this.loginButton}
+        />
+      );
     }
 
     // conditional rendering for the homepage; default true (shows first)
     let home = null;
     if (this.state.homePage) {
       document.body.style.background =
-        "url('https://images.pexels.com/photos/1604200/pexels-photo-1604200.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')";
+        "url('https://i.ebayimg.com/images/g/Mh4AAOSwlUhbjBHg/s-l1600.jpg')";
       home = (
         <div id="home-content">
           {/* // uncomment to work on login and signup functionalities
@@ -365,7 +388,7 @@ class MainContainer extends Component {
               id="logo-pic"
               src="https://image.flaticon.com/icons/png/512/876/876569.png"
             />
-            <h1>Queue</h1>
+            <h1>Nighthawk</h1>
           </div>
           <section id="home-page-search-bar">
             <input
@@ -390,9 +413,9 @@ class MainContainer extends Component {
 
     //SEONG ADDED**************************************************************************************************************************************************************************************************************************
     let favoritePage = null;
-        if (this.state.toggleFavorites){
-          favoritePage = 
-          <FavoritePageContainer 
+    if (this.state.toggleFavorites) {
+      favoritePage = (
+        <FavoritePageContainer
           favorites={this.state.favorites}
           // venueId={this.state.venueId}
           // venueName={this.state.venueName}
@@ -403,15 +426,16 @@ class MainContainer extends Component {
           // venueLatitude={this.state.venueLatitude}
           // venueLongitude={this.state.venueLongitude}
           // mapName={this.state.mapName}
-          />
-        }
+        />
+      );
+    }
 
     // conditional rendering for the category page
     let category = null;
     if (this.state.categoryPage) {
       document.body.style.background = "url('')";
 
-      category =
+      category = (
         <CategoryContainer
           // props for search bar
           setInputValue={this.setInputValue}
@@ -419,7 +443,6 @@ class MainContainer extends Component {
           favorites={this.state.favorites}
           addToFavorites={this.addToFavorites}
           moveMap={this.moveMap}
-
           searchInput={this.state.searchInput}
           location={this.state.location}
           searchResults={this.state.searchResults}
@@ -436,42 +459,39 @@ class MainContainer extends Component {
           current={this.state.current}
           headerFavsBtn={this.headerFavsBtn}
         />
-
+      );
     }
 
-
     // conditional rendering for the venue page
-  let venue = null;
-  if (this.state.venuePage) {
-    venue =
-    <VenueContainer
-      // props for search bar
+    let venue = null;
+    if (this.state.venuePage) {
+      venue = (
+        <VenueContainer
+          // props for search bar
 
-      search = {this.search}
-      setInputValue={this.setInputValue}
-      searchInput={this.state.searchInput}
-      location={this.state.location}
-      searchResults={this.state.searchResults}
-
-      // props for venue selection
-      venueId={this.state.venueId}
-      venueName={this.state.venueName}
-      venueUrl={this.state.venueUrl}
-      venueImage={this.state.venueImage}
-      venueLocation={this.state.venueLocation}
-      venuePhone={this.state.venuePhone}
-      venueWaitTimeList={this.state.venueWaitTimeList}
-      venueLatitude={this.state.venueLatitude}
-      venueLongitude={this.state.venueLongitude}
-      setWaitTime={this.setWaitTime}
-      addWaitTime={this.addWaitTime}
-      mapName={this.state.mapName}
-      renderOpenTable={this.renderOpenTable}
-      openTableId={this.state.openTableId}
-    />
-  }
-
-
+          search={this.search}
+          setInputValue={this.setInputValue}
+          searchInput={this.state.searchInput}
+          location={this.state.location}
+          searchResults={this.state.searchResults}
+          // props for venue selection
+          venueId={this.state.venueId}
+          venueName={this.state.venueName}
+          venueUrl={this.state.venueUrl}
+          venueImage={this.state.venueImage}
+          venueLocation={this.state.venueLocation}
+          venuePhone={this.state.venuePhone}
+          venueWaitTimeList={this.state.venueWaitTimeList}
+          venueLatitude={this.state.venueLatitude}
+          venueLongitude={this.state.venueLongitude}
+          setWaitTime={this.setWaitTime}
+          addWaitTime={this.addWaitTime}
+          mapName={this.state.mapName}
+          renderOpenTable={this.renderOpenTable}
+          openTableId={this.state.openTableId}
+        />
+      );
+    }
 
     return (
       <div>
