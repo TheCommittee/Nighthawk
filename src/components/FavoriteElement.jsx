@@ -2,6 +2,7 @@ import React from "react";
 import { tsPropertySignature } from "@babel/types";
 import "../css/CategoryPage.css";
 
+
 const FavoriteElement = props => {
   console.log("this is favoritepage", props.i);
   return (
@@ -24,12 +25,10 @@ const FavoriteElement = props => {
       </div>
       <div
         className="favbtn"
-        onClick={() => {
-          props.deleteBtnInFavsPg(props.el);
-        }}
-      >
+        onClick={() => {props.deleteBtnInFavsPg(props.el);}}>
         delete
       </div>
+
     </React.Fragment>
   );
 };

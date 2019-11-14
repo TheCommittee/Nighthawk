@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import FavoriteElement from "../components/FavoriteElement.jsx";
 import "../css/CategoryPage.css";
 
+
 const FavoritePageContainer = props => {
   return (
     <div>
       <h2>My favorites</h2>
       <div className="favs-column">
+
         {props.favorites.map((el, i) => (
           <FavoriteElement
             i={i}
