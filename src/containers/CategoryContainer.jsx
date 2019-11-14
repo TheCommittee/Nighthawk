@@ -33,7 +33,7 @@ class CategoryContainer extends Component {
       return (
         <div id="list">
           <button
-            className="list-item"
+            className="list-item searchItem"
             key={i}
             onClick={() =>
               this.props.selectVenue(
@@ -59,21 +59,23 @@ class CategoryContainer extends Component {
             {element.location.zip_code}
             {element.phone}
             <br />
+            Wait Time: {element.waitTime}
             {/* // need to grab the unique id provided from the yelp api data search results that are saved in state. need to use it to save into our database */}
             {/* <button onClick={() => this.props.selectVenue(element.id, element.name, element.url, element.image, element.location, element.phone)}>Select</button> */}
-          </button>
           <div
+            className="favbtn"
             id={
               this.props.favorites.indexOf(element) === -1
                 ? null
                 : "background-red"
             }
-            onClick={() => {
-              this.props.addToFavorites(element);
+            onClick={(e) => {
+              this.props.addToFavorites(e, element);
             }}
           >
-            Add to Favorites
+            Favorite
           </div>
+          </button>
         </div>
       );
     });
