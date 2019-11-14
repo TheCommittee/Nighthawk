@@ -24,7 +24,6 @@ dbController.bcryptify = (req, res, next) => {
       return next();
     }
   });
-  return next();
 }
 dbController.createUser = (req, res, next) => {
   console.log('hit createUser controller');
