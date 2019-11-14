@@ -72,6 +72,7 @@ class MainContainer extends Component {
     this.moveMap = this.moveMap.bind(this);
     this.renderOpenTable = this.renderOpenTable.bind(this);
     this.headerFavsBtn = this.headerFavsBtn.bind(this);
+    this.deleteBtnInFavsPg=this.deleteBtnInFavsPg.bind(this);
   }
 
   // functions used for login and signup
@@ -112,9 +113,23 @@ class MainContainer extends Component {
       categoryPage: false,
       venuePage: false,
     }))
-    // console.log('this is toggle',this.state.toggleFavorites)
   }
-
+  // let index = tempFavIds.indexOf(venue.id);
+  // tempFav.splice(index, 1);
+  // tempFavIds.splice(index, 1);
+  // this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+  deleteBtnInFavsPg(id){
+    // console.log('this is id', id)
+    const copyFavs = [...this.state.favorites];
+    console.log(copyFavs, 'copyFavs');
+    const index = copyFavs.indexOf(id)
+    console.log('this is index',index)
+    copyFavs.splice(index,1)
+    this.setState({ favorites: copyFavs })
+    axios.delete('/removefavorite',{
+      favorites: copyFavs
+    })
+  }
 
 
   // functions used for search bar
@@ -394,23 +409,14 @@ class MainContainer extends Component {
           favoritePage = 
           <FavoritePageContainer 
           favorites={this.state.favorites}
-          // venueId={this.state.venueId}
-          // venueName={this.state.venueName}
-          // venueUrl={this.state.venueUrl}
-          // venueImage={this.state.venueImage}
-          // venueLocation={this.state.venueLocation}
-          // venuePhone={this.state.venuePhone}
-          // venueLatitude={this.state.venueLatitude}
-          // venueLongitude={this.state.venueLongitude}
-          // mapName={this.state.mapName}
-          />
+          deleteBtnInFavsPg={this.deleteBtnInFavsPg}
+          />  
         }
 
     // conditional rendering for the category page
     let category = null;
     if (this.state.categoryPage) {
       document.body.style.background = "url('')";
-
       category =
         <CategoryContainer
           // props for search bar
