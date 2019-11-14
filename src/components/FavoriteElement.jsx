@@ -28,7 +28,6 @@ const FavoriteElement = props => {
           delete
         </div>
       </div>
-
     </React.Fragment>
   );
 };

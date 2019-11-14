@@ -73,6 +73,7 @@ class MainContainer extends Component {
     this.renderOpenTable = this.renderOpenTable.bind(this);
     this.headerFavsBtn = this.headerFavsBtn.bind(this);
     this.deleteBtnInFavsPg = this.deleteBtnInFavsPg.bind(this);
+    this.backButton = this.backButton.bind(this);
   }
 
   // functions used for login and signup
@@ -110,12 +111,15 @@ class MainContainer extends Component {
       venuePage: false
     }));
   }
-  // let index = tempFavIds.indexOf(venue.id);
-  // tempFav.splice(index, 1);
-  // tempFavIds.splice(index, 1);
-  // this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+  backButton(){
+    console.log('im in back button')
+    this.setState(prevState => ({
+      toggleFavorites: false,
+      categoryPage: true,
+      venuePage: true
+    }))
+  }
   deleteBtnInFavsPg(id) {
-    // console.log('this is id', id)
     const copyFavs = [...this.state.favorites];
     const index = copyFavs.indexOf(id);
     copyFavs.splice(index, 1);
@@ -449,6 +453,7 @@ class MainContainer extends Component {
         <FavoritePageContainer
           favorites={this.state.favorites}
           deleteBtnInFavsPg={this.deleteBtnInFavsPg}
+          backButton={this.backButton}
         />
       );
     }
