@@ -7,21 +7,25 @@ import "../css/CategoryPage.css";
 class CategoryContainer extends Component {
   constructor(props) {
     super(props);
+    // setTimeout(this.props.search(), 10000);
 
-    if (this.props.categoryPage && this.props.current < 50) {
-      window.onscroll = debounce(() => {
-        this.props.moveMap();
-        // console.log("scrolling");
-        if (this.props.current >= 50) return;
+    // this.props.search();
+    // if (this.props.categoryPage && this.props.current < 50) {
+    window.onscroll = debounce(() => {
+      this.props.moveMap();
+      // console.log("scrolling");
+      // if (this.props.current >= 50) return;
 
-        if (
-          document.documentElement.scrollTop >
-          document.documentElement.scrollHeight - window.innerHeight - 2
-        ) {
-          this.props.search();
-        }
-      });
-    }
+      // if (
+      //   document.documentElement.scrollTop >
+      //   document.documentElement.scrollHeight - window.innerHeight - 2
+      // ) {
+      // setTimeout(this.props.search(), 1000);
+
+      // }
+    });
+    // }
+    // window.addEventListener("loadend", this.props.search());
   }
 
   render() {
@@ -81,16 +85,18 @@ class CategoryContainer extends Component {
     });
 
     if (this.props.categoryPage) {
-
-      search =
+      search = (
         <div id="category-body">
-          <SearchDisplay
-            searchDisplayResults={searchDisplayResults}
+          <SearchDisplay searchDisplayResults={searchDisplayResults} />
+          <Map
+            name={this.props.mapName}
+            venueLocation={this.props.venueLocation}
+            latitude={this.props.latitude}
+            longitude={this.props.longitude}
           />
-          <Map name={this.props.mapName} venueLocation={this.props.venueLocation} latitude={this.props.latitude} longitude={this.props.longitude} />
         </div>
+      );
     }
-
 
     return (
       <div>
@@ -114,12 +120,16 @@ class CategoryContainer extends Component {
             onChange={this.props.setInputValue}
           />
           <input type="button" id="searchButton" onClick={this.props.search} />
-          <input type="button" id="headerFavsBtn" onClick={this.props.headerFavsBtn}/>
+          <input
+            type="button"
+            id="headerFavsBtn"
+            value="My Favorites"
+            onClick={this.props.headerFavsBtn}
+          />
         </section>
         {search}
       </div>
     );
-
   }
 }
 
