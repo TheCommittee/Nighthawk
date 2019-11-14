@@ -26,6 +26,7 @@ const VenueContainer = (props) => {
   }, [openTableIdNum])
 
    useEffect(() => {
+     console.log('in useeffect getting', openTableIdNum)
 
      const openId = fetch(`https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`)
          .then(data => data.json())
