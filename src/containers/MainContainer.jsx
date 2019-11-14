@@ -120,13 +120,12 @@ class MainContainer extends Component {
   deleteBtnInFavsPg(id) {
     // console.log('this is id', id)
     const copyFavs = [...this.state.favorites];
-    console.log(copyFavs, "copyFavs");
     const index = copyFavs.indexOf(id);
-    console.log("this is index", index);
     copyFavs.splice(index, 1);
     this.setState({ favorites: copyFavs });
-    axios.delete("/removefavorite", {
-      favorites: copyFavs
+    axios.post("/dbRouter/updateFav", {
+      username: this.state.formUsername,
+      favorites: this.state.favorites
     });
   }
 
