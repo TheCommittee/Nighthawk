@@ -58,7 +58,7 @@ body {
 
 #category-body {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   padding-top: 11rem;
 }
 
@@ -94,20 +94,9 @@ button:hover {
   color: white;
 }
 
-#map {
-  position: fixed;
-  left: 950px;
-}
-
-#displayColumn {
-  position: relative;
-  left: -20%;
-  /* font-family: "Montserrat", sans-serif; */
-}
-
 #venue-details-column {
   position: relative;
-  left: -20%;
+  left: 100%;
 }
 
 .searchItem {
@@ -132,8 +121,25 @@ button:hover {
   margin: 30px auto;
 }
 
-/* .favs-column {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
+#displayColumn {
+  position: relative;
+  left: 10%;
+}
+
+#back-btn {
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: 120px;
+  margin: 0 auto;
+  margin-top: 15px;
+}
+
+.list-item img {
+  max-height: 200px;
+}
+
+#map {
+  position: fixed;
+  right: 10%;
+}

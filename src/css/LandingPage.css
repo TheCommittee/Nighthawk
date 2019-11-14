@@ -50,6 +50,10 @@ h1 {
   margin-left: 1rem;
   margin-bottom: 2rem;
 }
+
+h2 {
+  margin: 20px 0;
+}
 /*
 #Q {
   color: white;
@@ -114,10 +118,11 @@ input {
   background: white;
   padding: 0.5em 0.5em;
   margin: 1em;
-  border-radius: 5px;
+  border-radius: 20px;
   text-align: center;
+  color: rgb(78, 78, 78);
 }
 .welcome {
-  color:white;
-  margin-bottom: .5em;
+  color: white;
+  margin-bottom: 0.5em;
 }
