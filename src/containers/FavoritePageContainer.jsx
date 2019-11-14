@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import FavoriteElement from "../components/FavoriteElement.jsx";
+import "../css/CategoryPage.css";
+
 
 const FavoritePageContainer = props => {
   return (
     <div>
-      <h3>My favorites</h3>
-      <div>
+      <h2>My favorites</h2>
+      <div className="favs-column">
+
         {props.favorites.map((el, i) => (
           <FavoriteElement
             i={i}
@@ -20,7 +23,7 @@ const FavoritePageContainer = props => {
             state={el.location.state}
             zipCode={el.location.zip_code}
             phone={el.phone}
-            deleteBtnInFavsPg={props.deleteBtnInFavsPg}            
+            deleteBtnInFavsPg={props.deleteBtnInFavsPg}
           />
         ))}
       </div>
