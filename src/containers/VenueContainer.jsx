@@ -12,17 +12,24 @@ const VenueContainer = props => {
   const googleName = props.mapName.replace(/[^A-Za-z]/g, "");
 
   useEffect(() => {
-    if (openTableIdNum !== "") {
-      console.log("use effect");
+    if (openTableIdNum !== '') {
 
       const script = document.createElement("script");
 
       script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
       script.async = false;
 
-      document.body.appendChild(script);
-    }
-  }, [openTableIdNum]);
+    document.body.appendChild(script);
+  }
+  }, [openTableIdNum])
+
+   useEffect(() => {
+     console.log('in useeffect getting', openTableIdNum)
+
+     const openId = fetch(`https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`)
+         .then(data => data.json())
+         .then((data) => setOpenTableIdNum(data.restaurants[0].id))
+  }, [])
 
   useEffect(() => {
     const openId = fetch(
@@ -73,12 +80,6 @@ const VenueContainer = props => {
             venueLocation={props.venueLocation}
             venuePhone={props.venuePhone}
           />
-          <WaitTimesDisplay
-            venueId={props.venueId}
-            venueWaitTimeList={props.venueWaitTimeList}
-            addWaitTime={props.addWaitTime}
-            setWaitTime={props.setWaitTime}
-          />
         </div>
 
         <div id="map">
@@ -87,8 +88,7 @@ const VenueContainer = props => {
             height="400"
             frameBorder="0"
             // #19 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-            src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCpOaMC0kkcCOIZQfF966NVFXcpdF91q08&q=${googleName}`}
-            title="googleMap"
+            src={`https://www.google.com/maps/embed/v1/place?key=${config.REACT_APP_NOT_SECRET_CODE}&q=${googleName}`}
           ></iframe>
         </div>
       </div>

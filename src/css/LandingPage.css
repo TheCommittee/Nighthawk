@@ -117,3 +117,7 @@ input {
   border-radius: 5px;
   text-align: center;
 }
+.welcome {
+  color:white;
+  margin-bottom: .5em;
+}

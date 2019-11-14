@@ -73,3 +73,5 @@ package.json
 API
 
 server/MongoPass.txt
+
+config.js
