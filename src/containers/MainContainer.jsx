@@ -113,12 +113,7 @@ class MainContainer extends Component {
       venuePage: false
     }));
   }
-  // let index = tempFavIds.indexOf(venue.id);
-  // tempFav.splice(index, 1);
-  // tempFavIds.splice(index, 1);
-  // this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
   deleteBtnInFavsPg(id) {
-    // console.log('this is id', id)
     const copyFavs = [...this.state.favorites];
     const index = copyFavs.indexOf(id);
     copyFavs.splice(index, 1);
