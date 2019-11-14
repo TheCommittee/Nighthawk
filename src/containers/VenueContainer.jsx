@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import VenueDetails from '../components/VenueDetails.jsx';
 import WaitTimesDisplay from '../components/WaitTimesDisplay.jsx';
 import '../css/VenuePage.css'
+import config from './../../config'
+
 
 const VenueContainer = (props) => {
   const [openTableIdNum, setOpenTableIdNum] = useState('')
@@ -71,7 +73,7 @@ const VenueContainer = (props) => {
             height="400"
             frameBorder="0"
             // #19 before ${props.venueLatitude} in src link specifies zoom (smaller number = less zoom)
-            src={`https://www.google.com/maps/embed/v1/place?key=putAPIKeyHere&q=${googleName}`}
+            src={`https://www.google.com/maps/embed/v1/place?key=${config.REACT_APP_NOT_SECRET_CODE}&q=${googleName}`}
           ></iframe>
         </div>
       </div>
