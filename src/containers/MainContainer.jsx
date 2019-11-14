@@ -5,6 +5,7 @@ import VenueContainer from "./VenueContainer.jsx";
 import LoginPage from "../components/LoginPage.jsx";
 import SignUpPage from "../components/SignUpPage.jsx";
 import axios from "axios";
+import FavoritePageContainer from './FavoritePageContainer.jsx'
 
 class MainContainer extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class MainContainer extends Component {
       venueLongitude: "",
       waitTime: 0,
       venueWaitTimeList: [],
-      mapName: '',
+      mapName: "",
 
       // components for infinite scrolling functionality
       current: 25,
@@ -50,7 +51,10 @@ class MainContainer extends Component {
 
       // components for favoriting restaurants
       favorites: [],
-      favoriteIds: []
+      favoriteIds: [],
+
+      //openTableId
+      openTableId: undefined
     };
 
     this.loginButton = this.loginButton.bind(this);
@@ -65,6 +69,9 @@ class MainContainer extends Component {
     this.selectVenue = this.selectVenue.bind(this);
     this.setWaitTime = this.setWaitTime.bind(this);
     this.addWaitTime = this.addWaitTime.bind(this);
+    this.moveMap = this.moveMap.bind(this);
+    this.renderOpenTable = this.renderOpenTable.bind(this);
+    this.headerFavsBtn = this.headerFavsBtn.bind(this);
   }
 
   // functions used for login and signup
@@ -87,10 +94,28 @@ class MainContainer extends Component {
     });
   }
 
-  componentDidMount() {
-    const script = '//www.opentable.com/widget/reservation/loader?rid=109594&rid=4524&type=multi&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false';
 
+  renderOpenTable(value) {
+    const script = document.createElement("script");
+
+    script.src = `//www.opentable.com/widget/reservation/loader?rid=${value}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
+    script.async = true;
+
+    document.body.appendChild(script);
   }
+  //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+  headerFavsBtn() {
+    this.setState(prevState => ({
+      toggleFavorites: !prevState.toggleFavorites,
+      loginPage: false,
+      signupPage: false,
+      categoryPage: false,
+      venuePage: false,
+    }))
+    // console.log('this is toggle',this.state.toggleFavorites)
+  }
+
+
 
   // functions used for search bar
   setInputValue(event) {
@@ -109,7 +134,7 @@ class MainContainer extends Component {
             loginPage: false,
           });
         }
-      }) 
+      })
   }
 
   handleSignup() {
@@ -123,7 +148,7 @@ class MainContainer extends Component {
             loginPage: false,
           });
         }
-      }) 
+      })
   }
 
   search() {
@@ -143,10 +168,11 @@ class MainContainer extends Component {
         // console.log('introspecting the data: ', parsedData.businesses[0])
 
         // Coordinates used for map rendered in Category Container (List Page)
-        const firstBusinessLatitude = parsedData.businesses[0].coordinates.latitude;
-        const firstBusinessLongitude = parsedData.businesses[0].coordinates.longitude;
+        const firstBusinessLatitude =
+          parsedData.businesses[0].coordinates.latitude;
+        const firstBusinessLongitude =
+          parsedData.businesses[0].coordinates.longitude;
         const firstBusinessName = parsedData.businesses[0].name;
-
 
         const listOfBusinesses = [];
         // console.log(parsedData.businesses.length)
@@ -172,7 +198,7 @@ class MainContainer extends Component {
               longitude: firstBusinessLongitude.toString(),
               searchResults: listOfBusinesses,
               current: state.current + 5,
-              mapName: firstBusinessName,
+              mapName: firstBusinessName
             };
           });
           // console.log(this.state.searchResults);
@@ -187,8 +213,39 @@ class MainContainer extends Component {
     });
   }
 
+  moveMap() {
+    let isScrolling;
+    window.addEventListener(
+      "scroll",
+      function (event) {
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(function () {
+          console.log("Scrolling has stopped.");
+        }, 66);
+      },
+      false
+    );
+    let target = document.querySelectorAll(".list-item");
+    let myItem = target[0];
+    for (let i = 0; i < target.length; i++) {
+      if (
+        target[i].getBoundingClientRect().top < 300
+        // &&
+        // target[i].getBoundingClientRect().top > 120
+      ) {
+        myItem = target[i].childNodes[1].data;
+      }
+      this.setState({ mapName: myItem });
+      // console.log("this.state.mapName -----> ", this.state.mapName);
+      // if (!isScrolling) {
+      //   this.setState({ mapName: myItem });
+      // }
+    }
+    console.log(isScrolling);
+  }
+
   addToFavorites(venue) {
-    console.log('this is searchResults', this.state.searchResults);
+    console.log("this is searchResults", this.state.searchResults);
     let tempFav = this.state.favorites;
     let tempFavIds = this.state.favoriteIds;
     // console.log(“VENUE ---> “, venue);
@@ -197,22 +254,25 @@ class MainContainer extends Component {
         if (tempFavIds.indexOf(venue.id) === -1) {
           // console.log(this.state.searchResults[i].id);
           // console.log(venue.id);
-          console.log('IN IF STATEMENT');
+          console.log("IN IF STATEMENT");
           tempFav.push(venue);
           tempFavIds.push(venue.id);
-          console.log('TEMPFAV ---> ', tempFav);
+          console.log("TEMPFAV ---> ", tempFav);
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+
           console.log('this.state.favorites -->', this.state.favorites);
           axios.post('/addfavorite', {
             restaurant_id: venue
           });
           break;
         } else {
+
           console.log('IN ELSE STATEMENT');
           let index = tempFavIds.indexOf(venue.id);
           tempFav.splice(index, 1);
           tempFavIds.splice(index, 1);
           this.setState({ favorites: tempFav, favoriteIds: tempFavIds });
+
           console.log('this.state.favorites -->', this.state.favorites);
           axios.delete('/removefavorite', {
             restaurant_id: venue
@@ -222,8 +282,6 @@ class MainContainer extends Component {
       }
     }
   }
-
-
 
 
   // functions used for to select a specific venue on the category page to display on the venue page
@@ -281,6 +339,7 @@ class MainContainer extends Component {
     let login = null;
     if (this.state.loginPage) {
 
+
       login = <LoginPage setInputValue={this.setInputValue} handleLogin={this.handleLogin} signupButton={this.signupButton} />;
     }
 
@@ -288,13 +347,13 @@ class MainContainer extends Component {
     let signup = null;
     if (this.state.signupPage) {
 
+
       signup = <SignUpPage setInputValue={this.setInputValue} handleSignup={this.handleSignup} loginButton={this.loginButton} />;
     }
 
     // conditional rendering for the homepage; default true (shows first)
     let home = null;
     if (this.state.homePage) {
-
       document.body.style.background =
         "url('https://images.pexels.com/photos/1604200/pexels-photo-1604200.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')";
       home = (
@@ -329,10 +388,29 @@ class MainContainer extends Component {
       );
     }
 
+    //SEONG ADDED**************************************************************************************************************************************************************************************************************************
+    let favoritePage = null;
+    if (this.state.toggleFavorites) {
+      favoritePage =
+        <FavoritePageContainer
+          favorites={this.state.favorites}
+        // venueId={this.state.venueId}
+        // venueName={this.state.venueName}
+        // venueUrl={this.state.venueUrl}
+        // venueImage={this.state.venueImage}
+        // venueLocation={this.state.venueLocation}
+        // venuePhone={this.state.venuePhone}
+        // venueLatitude={this.state.venueLatitude}
+        // venueLongitude={this.state.venueLongitude}
+        // mapName={this.state.mapName}
+        />
+    }
+
     // conditional rendering for the category page
     let category = null;
     if (this.state.categoryPage) {
       document.body.style.background = "url('')";
+
       category =
         <CategoryContainer
           // props for search bar
@@ -340,6 +418,8 @@ class MainContainer extends Component {
           search={this.search}
           favorites={this.state.favorites}
           addToFavorites={this.addToFavorites}
+          moveMap={this.moveMap}
+
           searchInput={this.state.searchInput}
           location={this.state.location}
           searchResults={this.state.searchResults}
@@ -354,8 +434,11 @@ class MainContainer extends Component {
           categoryPage={this.state.categoryPage}
           venuePage={this.state.venuePage}
           current={this.state.current}
+          headerFavsBtn={this.headerFavsBtn}
         />
+
     }
+
 
     // conditional rendering for the venue page
     let venue = null;
@@ -363,9 +446,9 @@ class MainContainer extends Component {
       venue =
         <VenueContainer
           // props for search bar
-          setInputValue={this.setInputValue}
-          search={this.search}
 
+          search={this.search}
+          setInputValue={this.setInputValue}
           searchInput={this.state.searchInput}
           location={this.state.location}
           searchResults={this.state.searchResults}
@@ -383,14 +466,18 @@ class MainContainer extends Component {
           setWaitTime={this.setWaitTime}
           addWaitTime={this.addWaitTime}
           mapName={this.state.mapName}
+          renderOpenTable={this.renderOpenTable}
+          openTableId={this.state.openTableId}
         />
     }
 
 
+
     return (
       <div>
-        {signup}
         {login}
+        {signup}
+        {favoritePage}
         {home}
         {category}
         {venue}

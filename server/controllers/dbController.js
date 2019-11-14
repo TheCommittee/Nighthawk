@@ -2,21 +2,14 @@ const db = require('../models/models.js');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
-
 const User = require('../models/userModel.js');
-
 const mongoose = require('mongoose');
-
 // --- mongo connection
-
 const mongoUrl = fs.readFileSync(path.resolve(__dirname, '../MongoPass.txt'), 'utf8');
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
-
 // ---
-
 const dbController = {};
-
 dbController.bcryptify = (req, res, next) => {
   console.log('within dbController.bcryptify');
   bcrypt.hash(req.body.password, 10, function (err, hash) {
@@ -33,7 +26,6 @@ dbController.bcryptify = (req, res, next) => {
   });
   return next();
 }
-
 dbController.createUser = (req, res, next) => {
   console.log('hit createUser controller');
   const { username, password } = res.locals.userInfo;
@@ -47,7 +39,6 @@ dbController.createUser = (req, res, next) => {
     }
   });
 }
-
 dbController.getUserData = (req, res, next) => {
   const { username } = req.body;
   console.log('hit dbController.getUserData');
@@ -60,7 +51,6 @@ dbController.getUserData = (req, res, next) => {
     }
   });
 }
-
 dbController.verifyUser = (req, res, next) => {
   const { username, password } = req.body;
   console.log('within verifyUser');
@@ -89,7 +79,6 @@ dbController.verifyUser = (req, res, next) => {
     }
   })
 }
-
 // dbController.createUser = (req, res, next) => {
 //   const { username, password } = res.locals.userInfo;
 //   console.log(username, password);
@@ -98,7 +87,6 @@ dbController.verifyUser = (req, res, next) => {
 //     INSERT INTO users (username, password)
 //     VALUES ($1, $2)
 //     `;
-
 //   // db currently does not save two accounts with the same username, but does not notify second user that username is already taken
 //   db.query(queryStr, [username, password], (err, data) => {
 //     if (err) {
@@ -110,14 +98,10 @@ dbController.verifyUser = (req, res, next) => {
 //       return next();
 //     }
 //   })
-
 //   return next();
 // }
-
 // dbController.verifyUser = (req, res, next) => {
-
 // }
-
 dbController.addVenue = async (req, res, next) => {
   const { venueId, venueName } = req.body;
   try {
@@ -138,19 +122,15 @@ dbController.addVenue = async (req, res, next) => {
     });
   }
 }
-
 // issue with duplicate unique primary key for venue; does adding a findVenue method or joining tables help fix this?
-
 dbController.addWaitTime = (req, res, next) => {
   const { waitTime, venueId } = req.body;
-
   // later, add a third column for createdby username
   const queryStr = `
         INSERT INTO WaitTimes (WaitTime, VenueID)
         VALUES ($1, $2)
         RETURNING *
         `;
-
   db.query(queryStr, [waitTime, venueId], (err, data) => {
     if (err) {
       return next({
@@ -162,7 +142,6 @@ dbController.addWaitTime = (req, res, next) => {
     // console.log(res.locals.results);
     return next();
   })
-
   // need to add async before (req, resp, next) if doing below method
   // try {
   //     const queryStr = `
@@ -183,7 +162,6 @@ dbController.addWaitTime = (req, res, next) => {
   //     });
   // }
 }
-
 dbController.getWaitTimes = async (req, res, next) => {
   const { venueId } = req.body;
   try {
@@ -205,5 +183,4 @@ dbController.getWaitTimes = async (req, res, next) => {
     });
   }
 }
-
 module.exports = dbController;
