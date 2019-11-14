@@ -5,7 +5,7 @@ const path = require('path');
 const User = require('../models/userModel.js');
 const mongoose = require('mongoose');
 // --- mongo connection
-const mongoUrl = fs.readFileSync(path.resolve(__dirname, '../MongoPass'), 'utf8');
+const mongoUrl = fs.readFileSync(path.resolve(__dirname, '../MongoPass.txt'), 'utf8');
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 // ---
