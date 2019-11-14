@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import VenueDetails from "../components/VenueDetails.jsx";
 import WaitTimesDisplay from "../components/WaitTimesDisplay.jsx";
 import "../css/VenuePage.css";
+
 import config from './../../config'
 
 const VenueContainer = props => {
@@ -13,24 +14,25 @@ const VenueContainer = props => {
   const googleName = props.venueName.replace(/[^A-Za-z]/g, "");
 
   useEffect(() => {
-    if (openTableIdNum !== '') {
-
+    if (openTableIdNum !== "") {
       const script = document.createElement("script");
 
       script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
       script.async = false;
 
-    document.body.appendChild(script);
-  }
-  }, [openTableIdNum])
+      document.body.appendChild(script);
+    }
+  }, [openTableIdNum]);
 
-   useEffect(() => {
-     console.log('in useeffect getting', openTableIdNum)
+  useEffect(() => {
+    console.log("in useeffect getting", openTableIdNum);
 
-     const openId = fetch(`https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`)
-         .then(data => data.json())
-         .then((data) => setOpenTableIdNum(data.restaurants[0].id))
-  }, [])
+    const openId = fetch(
+      `https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`
+    )
+      .then(data => data.json())
+      .then(data => setOpenTableIdNum(data.restaurants[0].id));
+  }, []);
 
   useEffect(() => {
     const openId = fetch(

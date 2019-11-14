@@ -4,11 +4,11 @@
   width: 100%;
 }
 
-* {
+/* * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
+} */
 
 body {
   font-size: 1.6rem;
@@ -38,7 +38,9 @@ body {
 }
 
 #venue-details-column {
-  margin-right: 1rem;
+  display: inline-block;
+  position: absolute;
+  left: 15%;
 }
 
 h2 {
@@ -50,9 +52,9 @@ h2 {
   width: auto;
 }
 
-#map {
+/* #map {
   margin-left: 1rem;
-}
+} */
 
 #specific-venue-details {
   font-size: 2rem;
