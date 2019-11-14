@@ -179,7 +179,6 @@ class MainContainer extends Component {
   }
 
   search() {
-    // console.log('THIS STATE LOCATION : ', this.state.location);
     fetch("/api", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -191,17 +190,17 @@ class MainContainer extends Component {
       .then(response => response.json())
       .then(data => {
         const parsedData = JSON.parse(data);
-        console.log("PARSEDDATA: ", parsedData);
-        // console.log('introspecting the data: ', parsedData.businesses[0])
-
-        // Coordinates used for map rendered in Category Container (List Page)
-        const firstBusinessLatitude =
-          parsedData.businesses[0].coordinates.latitude;
-        const firstBusinessLongitude =
-          parsedData.businesses[0].coordinates.longitude;
-        const firstBusinessName = parsedData.businesses[0].name;
-
+        // console.log("PARSEDDATA: ", parsedData);
         const listOfBusinesses = [];
+        for (let i = 0; i < parsedData.businesses.length; i += 1) {
+          listOfBusinesses.push({
+            id: parsedData.businesses[i].id,
+            name: parsedData.businesses[i].name,
+            image: parsedData.businesses[i].image_url,
+            location: parsedData.businesses[i].location,
+            category: parsedData.businesses[i].categories[0].title,
+            latitude: parsedData.businesses[i].coordinates.latitude,
+            longitude: parsedData.businesses[i].coordinates.longitude
         // console.log(parsedData.businesses.length)
         if (this.state.current <= 50) {
           for (let i = 0; i < this.state.current; i += 1) {
@@ -238,8 +237,15 @@ class MainContainer extends Component {
               mapName: firstBusinessName
             };
           });
-          // console.log(this.state.searchResults);
         }
+        this.setState(state => {
+          return {
+            searchResults: listOfBusinesses,
+            mapName: parsedData.businesses[0].name
+          };
+        });
+        // console.log(this.state.searchResults);
+        // }
       });
     this.setState({
       loginPage: false,
@@ -249,6 +255,8 @@ class MainContainer extends Component {
       venuePage: false
     });
   }
+
+
 
   moveMap() {
     // let isScrolling;
