@@ -9,7 +9,8 @@ import config from './../../config'
 const VenueContainer = props => {
   const [openTableIdNum, setOpenTableIdNum] = useState("");
 
-  const openTableName = props.venueName.replace(/[é]/g, "e");
+  let openTableName = props.venueName.replace(/[é]/g, "e");
+  openTableName = openTableName.replace(/[ã]/g, 'a');
 
   const googleName = props.venueName.replace(/[^A-Za-z]/g, "");
 
@@ -19,6 +20,7 @@ const VenueContainer = props => {
 
       script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
       script.async = false;
+
 
       document.body.appendChild(script);
     }
@@ -54,6 +56,8 @@ const VenueContainer = props => {
   return (
     <div>
       <section className="search-bar">
+        <div id='back-btn' onClick={()=>{props.backButton('v')}}>back</div>
+
         <input
           type="input"
           name="searchInput"

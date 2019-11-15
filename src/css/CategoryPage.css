@@ -17,7 +17,7 @@
 }
 
 .iframeholder {
-  animation: seeNow 0.1s 2s;
+  animation: seeNow 0.1s 2.5s;
   opacity: 0;
   animation-fill-mode: forwards;
 }
