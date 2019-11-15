@@ -57,6 +57,7 @@ const VenueContainer = props => {
     <div>
       <section className="search-bar">
         <div id='back-btn' onClick={()=>{props.backButton('v')}}>back</div>
+
         <input
           type="input"
           name="searchInput"

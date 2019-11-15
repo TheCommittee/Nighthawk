@@ -14,13 +14,15 @@ body {
   font-size: 1.6rem;
   min-height: 100%;
   width: 100%;
-  background: url("https://images.pexels.com/photos/1323712/pexels-photo-1323712.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260")
+  background: url("https://i.ebayimg.com/images/g/Mh4AAOSwlUhbjBHg/s-l1600.jpg")
     no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   font-family: "Montserrat", sans-serif;
+  background-color: rgb(68, 68, 68);
+  background-blend-mode: screen;
 }
 
 #logo-pic-venue {
