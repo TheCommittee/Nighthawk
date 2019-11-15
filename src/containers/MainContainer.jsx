@@ -48,7 +48,6 @@ class MainContainer extends Component {
       categoryPage: false,
       venuePage: false,
 
-
       //openTableId
       openTableId: undefined
     };
@@ -106,13 +105,20 @@ class MainContainer extends Component {
       venuePage: false
     }));
   }
-  backButton(){
+  backButton(val){
     console.log('im in back button')
-    this.setState(prevState => ({
-      toggleFavorites: false,
-      categoryPage: true,
-      venuePage: false
-    }))
+    if (this.state.toggleFavorites === true && val === 'f') {
+      this.setState({
+        toggleFavorites: false,
+        categoryPage: true,
+        venuePage: false,
+      })
+    } else if (this.state.venuePage === true && val === 'v') {
+      this.setState({
+        categoryPage: true,
+        venuePage: false
+      })
+    }
   }
   deleteBtnInFavsPg(id) {
     const copyFavs = [...this.state.favorites];
@@ -455,8 +461,8 @@ class MainContainer extends Component {
       venue = (
         <VenueContainer
           // props for search bar
-
-          search={this.search}
+            backButton={this.backButton}
+            search={this.search}
           setInputValue={this.setInputValue}
           searchInput={this.state.searchInput}
           location={this.state.location}

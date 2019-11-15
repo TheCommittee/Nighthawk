@@ -7,7 +7,7 @@ const FavoritePageContainer = props => {
     <div>
       <h2>My favorites</h2>
 
-      <div id='back-btn' onClick={()=>{props.backButton()}}>back</div>
+      <div id='back-btn' onClick={()=>{props.backButton('f')}}>back</div>
       <div className="favs-column">
         {props.favorites.map((el, i) => (
           <FavoriteElement
