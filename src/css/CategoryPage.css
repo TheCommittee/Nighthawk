@@ -50,6 +50,10 @@ body {
   bottom: 0;
   right: 0;
 }
+.favbtn:hover {
+  background-color: rgb(179, 67, 67);
+  color: white;
+}
 .search-bar {
   position: fixed;
   width: 100%;
@@ -195,5 +199,6 @@ iframe {
 }
 .favs-column {
   display: flex;
+  flex-wrap: wrap;
   /* flex-direction: column; */
 }

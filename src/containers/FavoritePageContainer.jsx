@@ -4,10 +4,19 @@ import "../css/CategoryPage.css";
 
 const FavoritePageContainer = props => {
   return (
-    <div id="favs-header">
-      <h2>My favorites</h2>
+    <div>
+      <div id="favs-header">
+        <h2>My favorites</h2>
 
-      <div id='back-btn' onClick={()=>{props.backButton()}}>back</div>
+        <div
+          id="back-btn"
+          onClick={() => {
+            props.backButton();
+          }}
+        >
+          back
+        </div>
+      </div>
       <div className="favs-column">
         {props.favorites.map((el, i) => (
           <FavoriteElement
