@@ -47,7 +47,7 @@ class MainContainer extends Component {
       homePage: true,
       categoryPage: false,
       venuePage: false,
-
+      favsColoring : false,
 
       //openTableId
       openTableId: undefined
@@ -207,9 +207,6 @@ class MainContainer extends Component {
             latitude: parsedData.businesses[i].coordinates.latitude,
             longitude: parsedData.businesses[i].coordinates.longitude,
         // console.log(parsedData.businesses.length)
-
-
-
             });
           }
 
@@ -449,6 +446,7 @@ class MainContainer extends Component {
           categoryPage={this.state.categoryPage}
           venuePage={this.state.venuePage}
           headerFavsBtn={this.headerFavsBtn}
+          favoriteIds={this.state.favoriteIds}
         />
       );
     }

@@ -68,7 +68,7 @@ class CategoryContainer extends Component {
           <div
             className="favbtn"
             id={
-              this.props.favorites.indexOf(element) === -1
+              this.props.favoriteIds.indexOf(element.id) === -1
                 ? null
                 : "background-red"
             }
