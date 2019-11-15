@@ -20,6 +20,8 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  background-color: rgb(68, 68, 68);
+  background-blend-mode: screen;
 }
 
 .favbtn {
@@ -79,6 +81,32 @@ button {
   cursor: pointer;
 }
 
+#venue-details-column {
+  border: 1px solid rgb(134, 134, 134);
+  border-radius: 10px;
+  margin: 0rem 2rem 1.5rem 1.5rem;
+  padding: 1rem;
+  list-style-type: none;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  align-items: center;
+  height: 40rem;
+
+  background-color: white;
+  width: 45rem;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+#venue-details-column h2 {
+  color: rgb(94, 94, 94);
+  font-size: 20px;
+}
+
+#venue-details-column #specific-venue-details {
+  color: rgb(61, 61, 61);
+  font-size: 16px;
+}
 img {
   width: 15rem;
   height: auto;
@@ -127,12 +155,19 @@ button:hover {
 }
 
 #back-btn {
-  border: 1px solid black;
+  border: 1px solid white;
+  color: white;
   border-radius: 20px;
   padding: 10px 20px;
   width: 120px;
   margin: 0 auto;
   margin-top: 15px;
+  cursor: pointer;
+}
+#back-btn:hover {
+  border: 1px solid rgb(153, 153, 153);
+  color: white;
+  background-color: rgb(153, 153, 153);
 }
 
 .list-item img {
@@ -142,4 +177,11 @@ button:hover {
 #map {
   position: fixed;
   right: 10%;
+}
+iframe {
+  border-radius: 10px !important;
+}
+.favs-column {
+  display: flex;
+  /* flex-direction: column; */
 }

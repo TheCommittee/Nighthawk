@@ -4,7 +4,7 @@ import "../css/CategoryPage.css";
 
 const FavoritePageContainer = props => {
   return (
-    <div>
+    <div id="favs-header">
       <h2>My favorites</h2>
       <div
         id="back-btn"
