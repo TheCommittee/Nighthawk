@@ -27,14 +27,6 @@ const VenueContainer = props => {
     }
   }, [openTableIdNum]);
 
-<<<<<<< HEAD
-     const openId = fetch(`https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`)
-         .then(data => data.json())
-         .then((data) => setOpenTableIdNum(data.restaurants[0].id))
-  }, [])
-//SEONG ADDED**********************************************************
-
-=======
   useEffect(() => {
     console.log("in useeffect getting", openTableIdNum);
 
@@ -44,7 +36,6 @@ const VenueContainer = props => {
       .then(data => data.json())
       .then(data => setOpenTableIdNum(data.restaurants[0].id));
   }, []);
->>>>>>> b9d451fd10fc7e9dd1b5eb3f855a65dd025a30a7
 
   useEffect(() => {
     const openId = fetch(
