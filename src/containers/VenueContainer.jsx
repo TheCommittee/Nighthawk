@@ -4,12 +4,13 @@ import VenueDetails from "../components/VenueDetails.jsx";
 import WaitTimesDisplay from "../components/WaitTimesDisplay.jsx";
 import "../css/VenuePage.css";
 
-import config from './../../config'
+import config from "./../../config";
 
 const VenueContainer = props => {
   const [openTableIdNum, setOpenTableIdNum] = useState("");
 
-  const openTableName = props.venueName.replace(/[é]/g, "e");
+  let openTableName = props.venueName.replace(/[é]/g, "e");
+  openTableName = openTableName.replace(/[ã]/g, "a");
 
   const googleName = props.venueName.replace(/[^A-Za-z]/g, "");
 
@@ -55,18 +56,28 @@ const VenueContainer = props => {
     <div>
       <section className="search-bar">
         <input
+          id="searchInput"
           type="input"
           name="searchInput"
           placeholder="Business or Category"
           onChange={e => props.setInputValue(e)}
         />
         <input
+          id="location"
           type="input"
           name="location"
           placeholder="Location"
           onChange={e => props.setInputValue(e)}
         />
         <input type="button" id="searchButton" onClick={props.search} />
+        <div
+          id="back-btn-venue"
+          onClick={() => {
+            props.backButton("v");
+          }}
+        >
+          back
+        </div>
       </section>
       <div id="venue-page">
         <div id="venue-details-column">
@@ -80,7 +91,7 @@ const VenueContainer = props => {
           />
         </div>
 
-        <div id="map">
+        <div id="venue-map">
           <iframe
             width="500"
             height="400"

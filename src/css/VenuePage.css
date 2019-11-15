@@ -25,6 +25,25 @@ body {
   background-blend-mode: screen;
 }
 
+input {
+  padding: 2rem;
+  outline: none;
+  border: 1px solid rgb(224, 224, 224);
+  border-radius: 40px;
+  margin: 1rem;
+  height: 4rem;
+  font-size: 1.7rem;
+  font-family: "Montserrat", sans-serif;
+}
+
+#searchInput {
+  width: 50rem;
+}
+
+#location {
+  width: 30rem;
+}
+
 #logo-pic-venue {
   height: 6rem;
   width: auto;
@@ -42,9 +61,18 @@ body {
 #venue-details-column {
   display: inline-block;
   position: absolute;
-  left: 15%;
+  left: 23%;
 }
 
+#venue-map {
+  position: absolute;
+  left: 59%;
+}
+
+#ot-widget-container1 {
+  position: absolute !important;
+  left: 5% !important;
+}
 h2 {
   font-size: 3rem;
 }

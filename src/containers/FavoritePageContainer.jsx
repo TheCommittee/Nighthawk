@@ -11,7 +11,7 @@ const FavoritePageContainer = props => {
         <div
           id="back-btn"
           onClick={() => {
-            props.backButton();
+            props.backButton("f");
           }}
         >
           back
