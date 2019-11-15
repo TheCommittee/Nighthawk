@@ -61,3 +61,7 @@ h2 {
 #specific-venue-details {
   font-size: 2rem;
 }
+
+#pizza {
+  opacity: 0;
+}

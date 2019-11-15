@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import "../css/LandingPage.css";
 import CategoryContainer from "./CategoryContainer.jsx";
 import VenueContainer from "./VenueContainer.jsx";
@@ -83,6 +83,8 @@ class MainContainer extends Component {
     });
   }
 
+
+
   signupButton() {
     this.setState({
       loginPage: false,
@@ -115,6 +117,8 @@ class MainContainer extends Component {
         venuePage: false,
       })
     } else if (this.state.venuePage === true && val === 'v') {
+      console.log(document.getElementById('bagel'))
+      // widget.parentNode.removeChild(widget)
       this.setState({
         categoryPage: true,
         venuePage: false
