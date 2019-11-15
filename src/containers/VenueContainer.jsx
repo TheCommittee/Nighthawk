@@ -5,7 +5,6 @@ import WaitTimesDisplay from "../components/WaitTimesDisplay.jsx";
 import "../css/VenuePage.css";
 import config from './../../config' 
 
-import config from './../../config'
 
 const VenueContainer = props => {
   const [openTableIdNum, setOpenTableIdNum] = useState("");
