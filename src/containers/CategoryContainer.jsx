@@ -98,6 +98,7 @@ class CategoryContainer extends Component {
       );
     }
 
+
     return (
       <div>
         <section className="search-bar">

@@ -394,7 +394,6 @@ class MainContainer extends Component {
             <h2 className="welcome">( Hi {this.state.userData.username} )</h2>
           )}
           <div id="logo">
-
             <h1>Nighthawk</h1>
           </div>
           <section id="home-page-search-bar">
@@ -451,7 +450,7 @@ class MainContainer extends Component {
           selectVenue={this.selectVenue}
           waitTimes={this.state.waitTimes}
           venueName={this.state.venueName}
-          
+
           latitude={this.state.latitude}
           longitude={this.state.longitude}
           venueLocation={this.state.venueLocation}
