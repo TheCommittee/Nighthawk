@@ -65,6 +65,7 @@ class CategoryContainer extends Component {
             Wait Time: {element.waitTime}
             {/* // need to grab the unique id provided from the yelp api data search results that are saved in state. need to use it to save into our database */}
             {/* <button onClick={() => this.props.selectVenue(element.id, element.name, element.url, element.image, element.location, element.phone)}>Select</button> */}
+<<<<<<< HEAD
           <div
             className="favbtn"
             id={
@@ -78,6 +79,21 @@ class CategoryContainer extends Component {
           >
             Favorite
           </div>
+=======
+            <div
+              className="favbtn"
+              id={
+                this.props.favorites.indexOf(element) === -1
+                  ? null
+                  : "background-red"
+              }
+              onClick={e => {
+                this.props.addToFavorites(e, element);
+              }}
+            >
+              Favorite
+            </div>
+>>>>>>> b9d451fd10fc7e9dd1b5eb3f855a65dd025a30a7
           </button>
         </div>
       );
@@ -98,13 +114,10 @@ class CategoryContainer extends Component {
       );
     }
 
+
     return (
       <div>
         <section className="search-bar">
-          <img
-            id="logo-pic-category"
-            src="https://image.flaticon.com/icons/png/512/876/876569.png"
-          />
           <input
             type="input"
             id="searchInput"
@@ -125,6 +138,12 @@ class CategoryContainer extends Component {
             id="headerFavsBtn"
             value="My Favorites"
             onClick={this.props.headerFavsBtn}
+          />
+          <input
+            type="button"
+            id="logoutBtn"
+            value="Logout"
+            onClick={this.props.logoutBtn}
           />
         </section>
         {search}

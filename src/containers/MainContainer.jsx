@@ -70,6 +70,7 @@ class MainContainer extends Component {
     this.headerFavsBtn = this.headerFavsBtn.bind(this);
     this.deleteBtnInFavsPg = this.deleteBtnInFavsPg.bind(this);
     this.backButton = this.backButton.bind(this);
+    this.logoutBtn = this.logoutBtn.bind(this);
   }
 
   // functions used for login and signup
@@ -106,13 +107,21 @@ class MainContainer extends Component {
       venuePage: false
     }));
   }
-  backButton(){
+  backButton(val){
     console.log('im in back button')
-    this.setState(prevState => ({
-      toggleFavorites: false,
-      categoryPage: true,
-      venuePage: false
-    }))
+    if (this.state.toggleFavorites === true && val === 'f') {
+      this.setState({
+        toggleFavorites: false,
+        categoryPage: true,
+        venuePage: false,
+      })
+    } else if (this.state.venuePage === true && val === 'v') {
+      this.setState({
+        categoryPage: true,
+        venuePage: false
+      })
+    }
+
   }
   deleteBtnInFavsPg(id) {
     const copyFavs = [...this.state.favorites];
@@ -144,12 +153,12 @@ class MainContainer extends Component {
           const newFavoriteIds = [];
           response.data.userData.favorites.forEach(element => {
             newFavoriteIds.push(element.id);
-          })
+          });
           this.setState({
             userData: response.data.userData,
             loginPage: false,
             favorites: response.data.userData.favorites,
-            favoriteIds: newFavoriteIds,
+            favoriteIds: newFavoriteIds
           });
         }
       });
@@ -188,13 +197,15 @@ class MainContainer extends Component {
         // console.log("PARSEDDATA: ", parsedData);
         const listOfBusinesses = [];
         for (let i = 0; i < parsedData.businesses.length; i += 1) {
-          let waitTime = 'Unknown';
+          let waitTime = "Unknown";
           if (parsedData.businesses[i].price) {
-            waitTime = Math.floor(Math.random() * 10 * parsedData.businesses[i].price.length);
+            waitTime = Math.floor(
+              Math.random() * 10 * parsedData.businesses[i].price.length
+            );
             if (waitTime < 10) {
-              waitTime = 'No Wait';
+              waitTime = "No Wait";
             } else {
-              waitTime += ' min';
+              waitTime += " min";
             }
           }
           listOfBusinesses.push({
@@ -205,13 +216,12 @@ class MainContainer extends Component {
             waitTime,
             category: parsedData.businesses[i].categories[0].title,
             latitude: parsedData.businesses[i].coordinates.latitude,
-            longitude: parsedData.businesses[i].coordinates.longitude,
-        // console.log(parsedData.businesses.length)
-            });
-          }
+            longitude: parsedData.businesses[i].coordinates.longitude
+            // console.log(parsedData.businesses.length)
+          });
+        }
 
-          // this.setState({ latitude: firstBusinessLatitude.toString(), longitude: firstBusinessLongitude.toString() })
-
+        // this.setState({ latitude: firstBusinessLatitude.toString(), longitude: firstBusinessLongitude.toString() })
 
         this.setState(state => {
           return {
@@ -227,11 +237,14 @@ class MainContainer extends Component {
       signupPage: false,
       homePage: false,
       categoryPage: true,
-      venuePage: false
+      venuePage: false,
+      formUsername: "",
+      formPassword: "",
+      userData: {},
+      favoriteIds: [],
+      favorites: []
     });
   }
-
-
 
   moveMap() {
     console.log("in moveMap!");
@@ -343,6 +356,15 @@ class MainContainer extends Component {
       });
   }
 
+  logoutBtn() {
+    this.setState({
+      loginPage: true,
+      homePage: true,
+      categoryPage: false,
+      venuePage: false
+    });
+  }
+
   render() {
     // conditional rendering for the login page
     let login = null;
@@ -371,18 +393,16 @@ class MainContainer extends Component {
     // conditional rendering for the homepage; default true (shows first)
     let home = null;
     if (this.state.homePage) {
-      document.body.style.background =
-        "url('https://i.ebayimg.com/images/g/Mh4AAOSwlUhbjBHg/s-l1600.jpg')";
+      // document.body.style.background =
+      //   "url('https://i.ebayimg.com/images/g/Mh4AAOSwlUhbjBHg/s-l1600.jpg')";
       home = (
         <div id="home-content">
           {/* // uncomment to work on login and signup functionalities
         <button onClick={this.loginButton}>Login</button> */}
-          { this.state.userData.username && <h2 className="welcome">( Hi { this.state.userData.username } )</h2>}
+          {this.state.userData.username && (
+            <h2 className="welcome">( Hi {this.state.userData.username} )</h2>
+          )}
           <div id="logo">
-            <img
-              id="logo-pic"
-              src="https://image.flaticon.com/icons/png/512/876/876569.png"
-            />
             <h1>Nighthawk</h1>
           </div>
           <section id="home-page-search-bar">
@@ -422,7 +442,7 @@ class MainContainer extends Component {
     // conditional rendering for the category page
     let category = null;
     if (this.state.categoryPage) {
-      document.body.style.background = "url('')";
+      // document.body.style.background = "url('')";
 
       category = (
         <CategoryContainer
@@ -439,6 +459,7 @@ class MainContainer extends Component {
           selectVenue={this.selectVenue}
           waitTimes={this.state.waitTimes}
           venueName={this.state.venueName}
+
           latitude={this.state.latitude}
           longitude={this.state.longitude}
           venueLocation={this.state.venueLocation}
@@ -447,6 +468,7 @@ class MainContainer extends Component {
           venuePage={this.state.venuePage}
           headerFavsBtn={this.headerFavsBtn}
           favoriteIds={this.state.favoriteIds}
+          logoutBtn={this.logoutBtn}
         />
       );
     }
@@ -457,8 +479,8 @@ class MainContainer extends Component {
       venue = (
         <VenueContainer
           // props for search bar
-
-          search={this.search}
+            backButton={this.backButton}
+            search={this.search}
           setInputValue={this.setInputValue}
           searchInput={this.state.searchInput}
           location={this.state.location}

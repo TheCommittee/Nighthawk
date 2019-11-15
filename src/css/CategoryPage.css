@@ -10,6 +10,18 @@
   padding: 0;
 }
 
+@keyframes seeNow {
+  100% {
+    opacity: 1;
+  }
+}
+
+.iframeholder {
+  animation: seeNow 0.1s 2.5s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
 body {
   font-size: 1.6rem;
   min-height: 100%;
@@ -20,6 +32,8 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  background-color: rgb(68, 68, 68);
+  background-blend-mode: screen;
 }
 
 .favbtn {
@@ -58,7 +72,7 @@ body {
 
 #category-body {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   padding-top: 11rem;
 }
 
@@ -79,6 +93,32 @@ button {
   cursor: pointer;
 }
 
+#venue-details-column {
+  border: 1px solid rgb(134, 134, 134);
+  border-radius: 10px;
+  margin: 0rem 2rem 1.5rem 1.5rem;
+  padding: 1rem;
+  list-style-type: none;
+  font-size: 16px;
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  align-items: center;
+  height: 40rem;
+
+  background-color: white;
+  width: 45rem;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+#venue-details-column h2 {
+  color: rgb(94, 94, 94);
+  font-size: 20px;
+}
+
+#venue-details-column #specific-venue-details {
+  color: rgb(61, 61, 61);
+  font-size: 16px;
+}
 img {
   width: 15rem;
   height: auto;
@@ -94,20 +134,9 @@ button:hover {
   color: white;
 }
 
-#map {
-  position: fixed;
-  left: 950px;
-}
-
-#displayColumn {
-  position: relative;
-  left: -20%;
-  /* font-family: "Montserrat", sans-serif; */
-}
-
 #venue-details-column {
   position: relative;
-  left: -20%;
+  left: 100%;
 }
 
 .searchItem {
@@ -132,8 +161,39 @@ button:hover {
   margin: 30px auto;
 }
 
-/* .favs-column {
+#displayColumn {
+  position: relative;
+  left: 10%;
+}
+
+#back-btn {
+  border: 1px solid white;
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: 120px;
+  margin: 0 auto;
+  margin-top: 15px;
+  cursor: pointer;
+}
+#back-btn:hover {
+  border: 1px solid rgb(153, 153, 153);
+  color: white;
+  background-color: rgb(153, 153, 153);
+}
+
+.list-item img {
+  max-height: 200px;
+}
+
+#map {
+  position: fixed;
+  right: 10%;
+}
+iframe {
+  border-radius: 10px !important;
+}
+.favs-column {
   display: flex;
-  justify-content: center;
-  align-items: center;
-} */
+  /* flex-direction: column; */
+}

@@ -5,34 +5,46 @@ import WaitTimesDisplay from "../components/WaitTimesDisplay.jsx";
 import "../css/VenuePage.css";
 import config from './../../config' 
 
+import config from './../../config'
+
 const VenueContainer = props => {
   const [openTableIdNum, setOpenTableIdNum] = useState("");
 
-  const openTableName = props.venueName.replace(/[é]/g, "e");
+  let openTableName = props.venueName.replace(/[é]/g, "e");
+  openTableName = openTableName.replace(/[ã]/g, 'a');
 
-  const googleName = props.mapName.replace(/[^A-Za-z]/g, "");
+  const googleName = props.venueName.replace(/[^A-Za-z]/g, "");
 
   useEffect(() => {
-    if (openTableIdNum !== '') {
-
+    if (openTableIdNum !== "") {
       const script = document.createElement("script");
 
       script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
       script.async = false;
 
-    document.body.appendChild(script);
-  }
-  }, [openTableIdNum])
 
-   useEffect(() => {
-     console.log('in useeffect getting', openTableIdNum)
+      document.body.appendChild(script);
+    }
+  }, [openTableIdNum]);
 
+<<<<<<< HEAD
      const openId = fetch(`https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`)
          .then(data => data.json())
          .then((data) => setOpenTableIdNum(data.restaurants[0].id))
   }, [])
 //SEONG ADDED**********************************************************
 
+=======
+  useEffect(() => {
+    console.log("in useeffect getting", openTableIdNum);
+
+    const openId = fetch(
+      `https://opentable.herokuapp.com/api/restaurants?name=${openTableName}&zip=${props.venueLocation.zip_code}`
+    )
+      .then(data => data.json())
+      .then(data => setOpenTableIdNum(data.restaurants[0].id));
+  }, []);
+>>>>>>> b9d451fd10fc7e9dd1b5eb3f855a65dd025a30a7
 
   useEffect(() => {
     const openId = fetch(
@@ -54,11 +66,8 @@ const VenueContainer = props => {
   return (
     <div>
       <section className="search-bar">
-        <img
-          id="logo-pic-venue"
-          src="https://image.flaticon.com/icons/png/512/876/876569.png"
-          alt="venue pic"
-        />
+        <div id='back-btn' onClick={()=>{props.backButton('v')}}>back</div>
+
         <input
           type="input"
           name="searchInput"
