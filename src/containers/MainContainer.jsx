@@ -47,6 +47,7 @@ class MainContainer extends Component {
       homePage: true,
       categoryPage: false,
       venuePage: false,
+      favsColoring : false,
 
       //openTableId
       openTableId: undefined
@@ -470,6 +471,7 @@ class MainContainer extends Component {
           categoryPage={this.state.categoryPage}
           venuePage={this.state.venuePage}
           headerFavsBtn={this.headerFavsBtn}
+          favoriteIds={this.state.favoriteIds}
           logoutBtn={this.logoutBtn}
         />
       );

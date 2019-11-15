@@ -3,29 +3,28 @@ import React, { useEffect, useState } from "react";
 import VenueDetails from "../components/VenueDetails.jsx";
 import WaitTimesDisplay from "../components/WaitTimesDisplay.jsx";
 import "../css/VenuePage.css";
-
 import config from './../../config'
 
 const VenueContainer = props => {
   const [openTableIdNum, setOpenTableIdNum] = useState("");
 
   let openTableName = props.venueName.replace(/[é]/g, "e");
-  openTableName = openTableName.replace(/[ã]/g, 'a');
+  openTableName = openTableName.replace(/[ã]/g, "a");
 
   const googleName = props.venueName.replace(/[^A-Za-z]/g, "");
 
-  // useEffect(() => {
-  //   if (openTableIdNum !== "") {
-  //     const script = document.createElement("script");
-  //     script.id = 'bagel'
-  //     script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
-  //     script.async = false;
-  //     console.log('hi michele')
-  //
-  //     document.body.appendChild(script);
-  //   }
-  // }, [openTableIdNum]);
-  //
+
+  useEffect(() => {
+    if (openTableIdNum !== "") {
+      const script = document.createElement("script");
+
+      script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
+      script.async = false;
+
+      document.body.appendChild(script);
+    }
+  }, [openTableIdNum]);
+
   useEffect(() => {
     console.log("in useeffect getting", openTableIdNum);
 
@@ -56,21 +55,29 @@ const VenueContainer = props => {
   return (
     <div>
       <section className="search-bar">
-        <div id='back-btn' onClick={()=>{props.backButton('v')}}>back</div>
-
         <input
+          id="searchInput"
           type="input"
           name="searchInput"
           placeholder="Business or Category"
           onChange={e => props.setInputValue(e)}
         />
         <input
+          id="location"
           type="input"
           name="location"
           placeholder="Location"
           onChange={e => props.setInputValue(e)}
         />
         <input type="button" id="searchButton" onClick={props.search} />
+        <div
+          id="back-btn-venue"
+          onClick={() => {
+            props.backButton("v");
+          }}
+        >
+          back
+        </div>
       </section>
       <div id="venue-page">
         <div id="venue-details-column">
@@ -84,7 +91,7 @@ const VenueContainer = props => {
           />
         </div>
 
-        <div id="map">
+        <div id="venue-map">
           <iframe
             width="500"
             height="400"

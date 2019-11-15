@@ -50,6 +50,10 @@ body {
   bottom: 0;
   right: 0;
 }
+.favbtn:hover {
+  background-color: rgb(179, 67, 67);
+  color: white;
+}
 .search-bar {
   position: fixed;
   width: 100%;
@@ -182,6 +186,23 @@ button:hover {
   background-color: rgb(153, 153, 153);
 }
 
+#back-btn-venue {
+  border: 1px solid white;
+  background-color: white;
+  color: rgb(153, 153, 153);
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: 120px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+#back-btn:hover,
+#back-btn-venue:hover {
+  border: 1px solid rgb(153, 153, 153);
+  color: white;
+  background-color: rgb(153, 153, 153);
+}
+
 .list-item img {
   max-height: 200px;
 }
@@ -190,10 +211,12 @@ button:hover {
   position: fixed;
   right: 10%;
 }
+
 iframe {
   border-radius: 10px !important;
 }
 .favs-column {
   display: flex;
+  flex-wrap: wrap;
   /* flex-direction: column; */
 }
