@@ -71,7 +71,12 @@ input {
 
 #ot-widget-container1 {
   position: absolute !important;
-  left: 5% !important;
+  left: -40px !important;
+  top: 80px;
+  -webkit-transform: scale(0.7);
+  width: 400px;
+  height: 500px;
+
 }
 h2 {
   font-size: 3rem;
@@ -90,6 +95,3 @@ h2 {
   font-size: 2rem;
 }
 
-#pizza {
-  opacity: 0;
-}

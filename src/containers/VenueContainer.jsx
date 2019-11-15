@@ -14,16 +14,16 @@ const VenueContainer = props => {
   const googleName = props.venueName.replace(/[^A-Za-z]/g, "");
 
 
-  useEffect(() => {
-    if (openTableIdNum !== "") {
-      const script = document.createElement("script");
-
-      script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
-      script.async = false;
-
-      document.body.appendChild(script);
-    }
-  }, [openTableIdNum]);
+  // useEffect(() => {
+  //   if (openTableIdNum !== "") {
+  //     const script = document.createElement("script");
+  //
+  //     script.src = `//www.opentable.com/widget/reservation/loader?rid=${openTableIdNum}&type=standard&theme=standard&iframe=true&domain=com&lang=en-US&newtab=false`;
+  //     script.async = false;
+  //
+  //     document.body.appendChild(script);
+  //   }
+  // }, [openTableIdNum]);
 
   useEffect(() => {
     console.log("in useeffect getting", openTableIdNum);
@@ -100,7 +100,7 @@ const VenueContainer = props => {
             src={`https://www.google.com/maps/embed/v1/place?key=${config.REACT_APP_NOT_SECRET_CODE}&q=${googleName}`}
           ></iframe>
         </div>
-          <iframe id="ot-widget-container1" src={`https://www.opentable.com/restref/client/?restref=${openTableIdNum}`}></iframe>
+          <iframe width="15%" height="30%" id="ot-widget-container1" src={`https://www.opentable.com/restref/client/?restref=${openTableIdNum}`}></iframe>
       </div>
     </div>
   );
